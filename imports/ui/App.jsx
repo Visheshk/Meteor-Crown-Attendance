@@ -78,48 +78,59 @@ export const App = () => {
       </header>
 
       <div className="main">
-        {user ? (
-          <Fragment>
-            <div className="user" onClick={logout}>
-              {user.username || user.profile.name} 🚪
-            </div>
+        { user ? 
+          (< > 
+            { 
+              user.username=="meteorite" ? (
+                <Fragment>
+                  <div className="user" onClick={logout}>
+                    {user.username || user.profile.name} 🚪
+                  </div>
 
-            <TaskForm />
+                  <TaskForm />
 
 
-            {isLoading && <div className="loading">loading...</div>}
+                  {isLoading && <div className="loading">loading...</div>}
 
-            <ul className="tasks">
-              {visitors.map(visitor => (
-                <Task
-                  key={visitor._id}
-                  visitor={visitor}
-                  onAddVisit={addVisit}
-                  makeNewBarcode={makeNewBarcode}
-                  // onCheckboxClick={toggleChecked}
-                  // onDeleteClick={deleteTask}
-                />
-              ))}
-            </ul>
-          </Fragment>
-        ) : (
-          <LoginForm />
+                  <ul className="tasks">
+                    {visitors.map(visitor => (
+                      <Task
+                        key={visitor._id}
+                        visitor={visitor}
+                        onAddVisit={addVisit}
+                        makeNewBarcode={makeNewBarcode}
+                        // onCheckboxClick={toggleChecked}
+                        // onDeleteClick={deleteTask}
+                      />
+                    ))}
+                  </ul>
+                  <BarcodeScannerComponent
+                    width={500}
+                    height={500}
+                    onUpdate={(err, result) => {
+                      if (result) {
+                        //call visits.insert function
+                        // if successful make border of image green
 
-        )}
-        <BarcodeScannerComponent
-          width={500}
-          height={500}
-          onUpdate={(err, result) => {
-            if (result) {
-              //call visits.insert function
-              // if successful make border of image green
-
-              setCamData(result.text);
+                        setCamData(result.text);
+                      }
+                      else {
+                        setCamData("Not Found")
+                      };
+                    }}
+                  />
+                </Fragment>
+              ) : (
+                <> </>
+              )
             }
-            else {setCamData("Not Found")};
-          }}
-        />
-        <p>{camData}  </p>
+            </>
+          ): (
+            <LoginForm />
+          )};
+        
+          
+          
       </div>
     </div>
   );
