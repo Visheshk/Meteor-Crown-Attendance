@@ -14,33 +14,11 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={submit} className="login-form">
-      <div>
+    
+      <div className="login-form">
          <Blaze template="loginButtons" />
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          placeholder="Username"
-          name="username"
-          required
-          onChange={e => setUsername(e.target.value)}
-        />
-      </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          required
-          onChange={e => setPassword(e.target.value)}
-        />
       </div>
-      <div>
-        <button type="submit">Log In</button>
-      </div>
-    </form>
+    
   );
 };
