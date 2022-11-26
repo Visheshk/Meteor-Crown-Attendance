@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
+import Blaze from 'meteor/gadicc:blaze-react-component';
+
 
 export const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -14,6 +16,7 @@ export const LoginForm = () => {
   return (
     <form onSubmit={submit} className="login-form">
       <div>
+         <Blaze template="loginButtons" />
         <label htmlFor="username">Username</label>
         <input
           type="text"

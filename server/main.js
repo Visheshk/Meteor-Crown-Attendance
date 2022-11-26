@@ -13,12 +13,14 @@ const insertTask = (taskText, user) =>
   });
 
 const SEED_USERNAME = 'meteorite';
+const SEED_EMAIL = 'meteorite@meteor.com';
 const SEED_PASSWORD = 'password';
 
 Meteor.startup(() => {
   if (!Accounts.findUserByUsername(SEED_USERNAME)) {
     Accounts.createUser({
       username: SEED_USERNAME,
+      email: SEED_EMAIL,
       password: SEED_PASSWORD,
     });
   }

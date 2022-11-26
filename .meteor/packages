@@ -28,3 +28,4 @@ service-configuration@1.3.0
 ostrio:flow-router-extra
 kadira:blaze-layout
 accounts-ui
+gadicc:blaze-react-component
