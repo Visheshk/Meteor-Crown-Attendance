@@ -1,9 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { AccountsUI } from 'meteor/accounts-ui';
 import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection';
 import { ServiceConfiguration } from 'meteor/service-configuration';
-// import { Accounts } from 'meteor/accounts-base';
 import '/imports/api/tasksMethods';
 import '/imports/api/tasksPublications';
 
@@ -52,10 +50,6 @@ Meteor.startup(() => {
       'Seventh Task',
     ].forEach(taskText => insertTask(taskText, user));
   }
-
-  
-
-
 });
 
 ServiceConfiguration.configurations.upsert(
