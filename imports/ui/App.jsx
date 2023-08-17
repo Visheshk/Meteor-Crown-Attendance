@@ -8,9 +8,6 @@ import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection
 import { Task } from './Task';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
-import * as tf from '@tensorflow/tfjs';
-import '@tensorflow/tfjs-react-native';
-import * as poseDetection from '@tensorflow-models/pose-detection';
 
 const toggleChecked = ({ _id, isChecked }) =>
   Meteor.call('tasks.setIsChecked', _id, !isChecked);
@@ -30,11 +27,6 @@ const makeNewBarcode = ({visitor}) => {
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
-  const init = async () => {
-    // await tf.ready();
-    this.detector = poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER});;
-  }
-  init();
 
   const [hideCompleted, setHideCompleted] = useState(false);
   const [camData, setCamData] = useState(0);
@@ -60,7 +52,6 @@ export const App = () => {
      video.srcObject = stream;
      video.onloadedmetadata = () => {
        video.play();
-       console.log(detector);
        // if (detector)
        // poses = await detector.estimatePoses(video);
        // console.log(poses);

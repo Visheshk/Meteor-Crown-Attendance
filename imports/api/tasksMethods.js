@@ -11,6 +11,7 @@ Meteor.methods({
       throw new Meteor.Error('Not authorized.');
     }
 
+    visCount = 0;
     //TODO: create new random number for barcode creation
     // [random 3 digit string] +  [5 digit index] + [random 4 digit string];
     // visCount = VisitorsCollection.find().count();
