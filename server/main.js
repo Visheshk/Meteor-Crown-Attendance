@@ -17,14 +17,26 @@ const insertTask = (taskText, user) =>
 const SEED_USERNAME = 'meteorite';
 const SEED_EMAIL = 'meteorite@meteor.com';
 const SEED_PASSWORD = 'password';
+const roomNames = ["room1", "room2", "room3", "room4"]
+const roomPassword = "coerce-sediment-striking";
 
 Meteor.startup(() => {
+
   if (!Accounts.findUserByUsername(SEED_USERNAME)) {
     Accounts.createUser({
       username: SEED_USERNAME,
       email: SEED_EMAIL,
       password: SEED_PASSWORD,
     });
+  }
+  for (rn in roomNames) {
+    if (!Accounts.findUserByUsername(roomNames[rn])) {
+      Accounts.createUser({
+        username: roomNames[rn],
+        email: roomNames[rn] + "@crownrooms.com",
+        password: roomPassword,
+      });
+    }
   }
 
   const user = Accounts.findUserByUsername(SEED_USERNAME);
@@ -47,7 +59,9 @@ Meteor.startup(() => {
 });
 
 ServiceConfiguration.configurations.upsert(
-  { service: 'github' },
+  { 
+    // service: 'github' 
+  },
   {
     $set: {
       loginStyle: 'popup',

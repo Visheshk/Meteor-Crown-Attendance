@@ -18,5 +18,7 @@ export const TaskForm = () => {
       Date of Birth: <input type="date" name="dob" required /> 
       <button type="submit">Add Visitor</button>
     </form>
+
+    
   );
 };

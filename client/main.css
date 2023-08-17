@@ -24,6 +24,7 @@ button {
   box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
   padding: 5px;
   cursor: pointer;
+  margin:1em;
 }
 
 button:focus {
@@ -138,7 +139,7 @@ header {
 
 .login-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100%;
 
   justify-content: center;

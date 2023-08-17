@@ -1,11 +1,16 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState, Fragment } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
-import BarcodeScannerComponent from "react-qr-barcode-scanner";
+// import BarcodeScannerComponent from "react-qr-barcode-scanner";
+import Quagga from '@ericblade/quagga2'; 
+import adapter from 'webrtc-adapter';
 import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection';
 import { Task } from './Task';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
+import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-react-native';
+import * as poseDetection from '@tensorflow-models/pose-detection';
 
 const toggleChecked = ({ _id, isChecked }) =>
   Meteor.call('tasks.setIsChecked', _id, !isChecked);
@@ -19,12 +24,21 @@ const makeNewBarcode = ({visitor}) => {
   Meteor.call('visitors.barUpdate', visitor);
 }
 
+// const editVis = ({visitor}) => {
+//   Meteor.call('visitors.barUpdate', visitor);
+// }
+
 export const App = () => {
   const user = useTracker(() => Meteor.user());
+  const init = async () => {
+    // await tf.ready();
+    this.detector = poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER});;
+  }
+  init();
 
   const [hideCompleted, setHideCompleted] = useState(false);
   const [camData, setCamData] = useState(0);
-  const [stopStream, setStopStream] = useState(false);
+  const [stopStream, setStopStream] = useState(true);
 
   const hideCompletedFilter = { isChecked: { $ne: true } };
 
@@ -37,6 +51,23 @@ export const App = () => {
     setStopStream(!stopStream);
     console.log(stopStream);
     // setTimeout(() => closeModal(), 0);
+  }
+
+  var video = document.getElementById('video');
+  if(video && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+   navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+     // video.src = window.URL.createObjectURL(stream);
+     video.srcObject = stream;
+     video.onloadedmetadata = () => {
+       video.play();
+       console.log(detector);
+       // if (detector)
+       // poses = await detector.estimatePoses(video);
+       // console.log(poses);
+     };
+
+     // video.play();
+   });
   }
 
   const { visitors, tasks, pendingTasksCount, isLoading } = useTracker(() => {
@@ -104,21 +135,8 @@ export const App = () => {
                       />
                     ))}
                   </ul>
-                  <BarcodeScannerComponent
-                    width={500}
-                    height={500}
-                    onUpdate={(err, result) => {
-                      if (result) {
-                        //call visits.insert function
-                        // if successful make border of image green
-
-                        setCamData(result.text);
-                      }
-                      else {
-                        setCamData("Not Found")
-                      };
-                    }}
-                  />
+                  
+                  <video id="video" width="640" height="480" autoPlay></video>
                 </Fragment>
               ) : (
                 <> </>

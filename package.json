@@ -9,12 +9,24 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.15.4",
+    "@ericblade/quagga2": "^1.8.2",
+    "@mediapipe/pose": "^0.5.1675469404",
+    "@tensorflow-models/pose-detection": "^2.1.0",
+    "@tensorflow/tfjs": "^4.10.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.10.0",
+    "@tensorflow/tfjs-backend-webgpu": "^4.10.0",
+    "@tensorflow/tfjs-converter": "^4.10.0",
+    "@tensorflow/tfjs-core": "^4.10.0",
+    "@tensorflow/tfjs-react-native": "^0.8.0",
     "bcrypt": "^5.0.1",
+    "expo-gl": "^13.0.1",
     "meteor-node-stubs": "^1.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-jsbarcode": "^0.2.4",
-    "react-qr-barcode-scanner": "^1.0.6"
+    "react-native-meteor": "^1.4.0",
+    "react-qr-barcode-scanner": "^1.0.6",
+    "webrtc-adapter": "^8.2.3"
   },
   "meteor": {
     "mainModule": {

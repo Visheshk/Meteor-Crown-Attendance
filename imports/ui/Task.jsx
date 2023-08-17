@@ -16,6 +16,8 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
       <Barcode value={visitor.barcodeId} options={{height:20}} />
 
       <span>Name: {visitor.name}, Age: {visitor.age}, Gender: {visitor.gender}, Dob: {visitor.dob}, current room: {visitor.currentRoom}, notes: {visitor.notes}, barcode: {visitor.barcodeId}</span>
+
+      <button onClick={() => editVisitor({"visitor": visitor._id})}>Edit </button>
       <button onClick={() => makeNewBarcode({"visitor": visitor._id})}>Make new barcode</button>
 
       <button onClick={() => onAddVisit({"visitor": visitor._id, "room": "test"})}>Add visit</button>
