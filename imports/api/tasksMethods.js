@@ -1,9 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { TasksCollection, VisitorsCollection, VisitsCollection } from '/imports/db/TasksCollection';
+import {WebApp} from 'meteor/webapp';
 
-Meteor.methods({
-  
+WebApp.connectHandlers.use('/hello', (req, res, next) => {
+  res.writeHead(200);
+  res.end(`Hello world from: ${Meteor.release}`);
+  qq = req.query;
+
+  if (qq["kind"] == "barcodeDataUpdate") {
+    // console.log(qq.fieldName);
+    console.log(Meteor.call("visitors.barcodeDataUpdate", qq.barcodeId, qq.fieldName, qq.fieldVal));
+  }
+})
+
+Meteor.methods({  
   'visitors.insert'(name, age, gender, dob, notes) {
     // check(text, String);
 
@@ -34,10 +45,46 @@ Meteor.methods({
   },
 
   'visitors.barUpdate' (id) {
-    console.log(id);
+    // console.log(id);
     
     barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+    
+    // confirm that no one else has this barcodeId
+    while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
+        barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+    }
+    
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
+  },
+
+  'visitors.barcodeDataUpdate' (barcodeId, field, value) {
+    newData = {};
+    newData[field] = value;
+    // console.log("bcd up")
+    return VisitorsCollection.update (
+    {
+      barcodeId: barcodeId
+    }, {
+      $set: {
+        newData
+      }
+    },
+    {upsert: true})
+  },
+
+  'visitors.nameUpdate' (name, field, value) {
+    newData = {};
+    newData[field] = value;
+    // console.log("bcd up")
+    return VisitorsCollection.update (
+    {
+      name: name
+    }, {
+      $set: {
+        newData
+      }
+    },
+    {upsert: true})
   },
 
   // 'visitors.update'( id, room ) {
