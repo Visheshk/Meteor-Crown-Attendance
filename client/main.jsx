@@ -7,8 +7,6 @@ Meteor.startup(() => {
   render(<App />, document.getElementById('react-target'));
   Accounts.ui.config({
     requestPermissions: {
-      facebook: ['user_likes'],
-      github: ['user', 'repo']
     },
     requestOfflineToken: {
       google: true
