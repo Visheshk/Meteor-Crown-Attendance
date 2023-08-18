@@ -1,13 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState, Fragment } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
-// import BarcodeScannerComponent from "react-qr-barcode-scanner";
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import Quagga from '@ericblade/quagga2'; 
 import adapter from 'webrtc-adapter';
 import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection';
 import { Task } from './Task';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
+import { UserLogger } from './UserLogger';
 
 const toggleChecked = ({ _id, isChecked }) =>
   Meteor.call('tasks.setIsChecked', _id, !isChecked);
@@ -20,6 +21,11 @@ const addVisit = ({visitor, room}) => {
 const makeNewBarcode = ({visitor}) => {
   Meteor.call('visitors.barUpdate', visitor);
 }
+
+const findByBarcode = ({barcode}) => {
+  Meteor.call('visitors.findByBarcode', barcode);
+}
+
 
 // const editVis = ({visitor}) => {
 //   Meteor.call('visitors.barUpdate', visitor);
@@ -92,7 +98,7 @@ export const App = () => {
         <div className="app-bar">
           <div className="app-header">
             <h1>
-              📝️ To Do List
+              Data Recorder
               {pendingTasksTitle}
             </h1>
           </div>
@@ -127,10 +133,23 @@ export const App = () => {
                     ))}
                   </ul>
                   
-                  <video id="video" width="640" height="480" autoPlay></video>
+                   <BarcodeScannerComponent
+                      width={500}
+                      height={200}
+                      onUpdate={(err, result) => {
+                        if (result) {
+                          //call visits.insert function
+                          // if successful make border of image green
+                          setCamData(result.text);
+                          // spotVisitor(result.text);
+                        }
+                        else {setCamData("Not Found")};
+                      }}
+                    />
+                    <h3>{camData}</h3>
                 </Fragment>
               ) : (
-                <> </>
+                <UserLogger />
               )
             }
             </>
