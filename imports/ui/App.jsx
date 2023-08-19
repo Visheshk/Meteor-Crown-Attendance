@@ -149,7 +149,7 @@ export const App = () => {
                     <h3>{camData}</h3>
                 </Fragment>
               ) : (
-                <UserLogger />
+                <UserLogger visitors = {visitors}/>
               )
             }
             </>

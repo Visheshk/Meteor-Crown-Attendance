@@ -19,7 +19,12 @@ const randomString = function () {
   return ss.slice(ss.length-8, ss.length+1);
 }
 
-Meteor.methods({  
+Meteor.methods({
+  'visitors.findByName'(name) {
+    console.log(VisitorsCollection.findOne({"name": name}));
+    return VisitorsCollection.findOne({"name": name});
+  },
+
   'visitors.insert'(name, age, gender, dob, notes) {
     // check(text, String);
 
