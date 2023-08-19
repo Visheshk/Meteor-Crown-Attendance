@@ -55,6 +55,7 @@ Meteor.methods({
     }
     
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
+    return barcodeId;
   },
 
   'visitors.barcodeDataUpdate' (barcodeId, field, value) {
@@ -76,15 +77,14 @@ Meteor.methods({
     newData = {};
     newData[field] = value;
     // console.log("bcd up")
-    return VisitorsCollection.update (
-    {
-      name: name
-    }, {
-      $set: {
-        newData
-      }
-    },
-    {upsert: true})
+    newvid = VisitorsCollection.update (
+    { name: name }, 
+    { $set: { newData } },
+    { upsert: true });
+    // console.log(newvid);
+    // newvBar = Meteor.call('visitors.barUpdate', newvid)
+    // console.log(newvBar);
+    // return newvBar;
   },
 
   // 'visitors.update'( id, room ) {
