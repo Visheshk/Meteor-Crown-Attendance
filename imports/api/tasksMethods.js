@@ -14,6 +14,11 @@ WebApp.connectHandlers.use('/hello', (req, res, next) => {
   }
 })
 
+const randomString = function () {
+  ss = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+  return ss.slice(ss.length-8, ss.length+1);
+}
+
 Meteor.methods({  
   'visitors.insert'(name, age, gender, dob, notes) {
     // check(text, String);
@@ -28,7 +33,7 @@ Meteor.methods({
     // visCount = VisitorsCollection.find().count();
 
     // barcodeId = String(Math.trunc(Math.random()*1000)) + String(visCount).padStart(5,'0') + String(Math.trunc(Math.random()*1000));
-    barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+    barcodeId = randomString();
 
     VisitorsCollection.insert({
       name: name,
@@ -47,11 +52,11 @@ Meteor.methods({
   'visitors.barUpdate' (id) {
     // console.log(id);
     
-    barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+    barcodeId = randomString();
     
     // confirm that no one else has this barcodeId
     while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
-        barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
+        barcodeId = randomString();
     }
     
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
@@ -76,10 +81,11 @@ Meteor.methods({
   'visitors.nameUpdate' (name, field, value) {
     newData = {};
     newData[field] = value;
+    setQuery = {$set: newData}
     // console.log("bcd up")
     newvid = VisitorsCollection.update (
     { name: name }, 
-    { $set: { newData } },
+    { $set: newData },
     { upsert: true });
     // console.log(newvid);
     // newvBar = Meteor.call('visitors.barUpdate', newvid)

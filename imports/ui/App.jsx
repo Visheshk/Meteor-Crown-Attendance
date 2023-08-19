@@ -154,7 +154,10 @@ export const App = () => {
             }
             </>
           ): (
-            <LoginForm />
+            <>
+              <UserLogger />
+              <LoginForm />
+            </>
           )};
         
           

@@ -32,18 +32,29 @@ export const UserLogger = () => {
 
   return (
     <>
-    <div>
-      <form className="set-name" onSubmit={setName}>
-        <input type="text" name="name" placeholder="name" required /> 
-        <button type="submit"> Set Name </button>
+
+      <form className="set-name login-form" onSubmit={setName}>
+        <div> <label htmlFor="password">Set your name (just once is enough) </label>
+          <input type="text" name="name" placeholder="Name" required /> 
+        </div>
+        <div>
+          <button type="submit"> Set Name </button>
+        </div>
       </form>
       
-      <form className="update-data" onSubmit={handleSubmit}>  
-        <input type="text" name="fieldName" placeholder="feature" required /> 
-        <input type="text" name="fieldValue" placeholder="value" required /> 
-        <button type="submit">Add Data</button>
-      </form>
+      <form className="update-data login-form" onSubmit={handleSubmit}>  
+      <div> <label htmlFor="password">New Feature</label>
+        <input type="text" name="fieldName" placeholder="Feature" required /> 
       </div>
+      <div> <label htmlFor="password">Feature Value</label>
+        <input type="text" name="fieldValue" placeholder="Value" required /> 
+      </div>
+      <div>
+        <button type="submit">Add Data</button>
+      </div>
+
+      </form>
+      
 
     </>
   );
