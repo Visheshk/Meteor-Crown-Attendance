@@ -14,9 +14,9 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={submit} className="login-form">
+    <form onSubmit={submit} className="login-form2">
       <div>
-         <Blaze template="loginButtons" />
+         {/*<Blaze template="loginButtons" />*/}
         <label htmlFor="username">Username</label>
         <input
           type="text"
