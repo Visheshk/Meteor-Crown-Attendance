@@ -2,9 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { Session } from 'meteor/session'
 
-export const UserLogger = () => {
+export const UserLogger = ({visitors}) => {
   const [text, setText] = useState('');
+  const [pageName, setPageName] = useState('');
+  Session.set("thisVisitor", {});
 
+  console.log(visitors)
   const handleSubmitOld = e => {
     e.preventDefault();
     console.log(e.target.age.value);
@@ -26,7 +29,19 @@ export const UserLogger = () => {
     console.log(e.target.name.value);
     name = e.target.name.value;
     Session.set("name", name);
-    Meteor.call
+    // obj = Meteor.call('visitors.findByName', name);
+    // console.log(obj);
+    thisV = {};
+    for (v in visitors) {
+      if (visitors[v]["name"] == name) {
+        thisV = visitors[v];
+        break;
+      }
+    }
+    setText(thisV);
+    Session.set("thisVisitor", thisV);
+    console.log(Session.get("thisVisitor"));
+    // console.log(text);
   }
 
 
@@ -54,6 +69,15 @@ export const UserLogger = () => {
       </div>
 
       </form>
+      
+      <div>
+      {Object.keys(Session.get("thisVisitor")).map(vv => {
+        console.log(vv);
+        return vv
+      }
+      )}
+          
+      </div>
       
 
     </>
