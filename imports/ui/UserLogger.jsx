@@ -1,13 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
+import { PersonalView } from './PersonalView';
 import { Session } from 'meteor/session'
 
 export const UserLogger = ({visitors}) => {
   const [text, setText] = useState('');
   const [pageName, setPageName] = useState('');
-  Session.set("thisVisitor", {});
+  // Session.set("thisVisitor", {});
 
-  console.log(visitors)
+  console.log(visitors);
   const handleSubmitOld = e => {
     e.preventDefault();
     console.log(e.target.age.value);
@@ -38,10 +39,13 @@ export const UserLogger = ({visitors}) => {
         break;
       }
     }
-    setText(thisV);
     Session.set("thisVisitor", thisV);
     console.log(Session.get("thisVisitor"));
     // console.log(text);
+  }
+
+  if (Session.get("thisVisitor")) {
+    console.log(Session.get("thisVisitor"));
   }
 
 
@@ -58,24 +62,22 @@ export const UserLogger = ({visitors}) => {
       </form>
       
       <form className="update-data login-form" onSubmit={handleSubmit}>  
-      <div> <label htmlFor="password">New Feature</label>
-        <input type="text" name="fieldName" placeholder="Feature" required /> 
-      </div>
-      <div> <label htmlFor="password">Feature Value</label>
-        <input type="text" name="fieldValue" placeholder="Value" required /> 
-      </div>
-      <div>
-        <button type="submit">Add Data</button>
-      </div>
+        <div> 
+          <label htmlFor="password">New Feature</label>
+          <input type="text" name="fieldName" placeholder="Feature" required /> 
+        </div>
+        <div> 
+          <label htmlFor="password">Feature Value</label>
+          <input type="text" name="fieldValue" placeholder="Value" required /> 
+        </div>
+        <div>
+          <button type="submit">Add Data</button>
+        </div>
 
       </form>
       
       <div>
-      {Object.keys(Session.get("thisVisitor")).map(vv => {
-        console.log(vv);
-        return vv
-      }
-      )}
+        
           
       </div>
       

@@ -147,16 +147,20 @@ export const App = () => {
                       }}
                     />
                     <h3>{camData}</h3>
+                    <UserLogger visitors = {visitors}/>
                 </Fragment>
               ) : (
-                <UserLogger visitors = {visitors}/>
+                <>
+                  <p>test</p>
+                  <LoginForm />
+                </>
               )
             }
             </>
           ): (
             <>
-              <UserLogger />
-              <LoginForm />
+              
+              
             </>
           )};
         
