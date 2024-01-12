@@ -2,7 +2,7 @@ import React from 'react';
 import Barcode from 'react-jsbarcode';
 
 export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
-  // console.log(visitor);
+  console.log(visitor.barcodeId.length);
   // JsBarcode("#barcode", "Hi world!");
 
   return (
@@ -13,8 +13,12 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
         // onClick={() => onCheckboxClick(task)}
         readOnly
       />
-      <Barcode value={visitor.barcodeId} options={{height:20}} />
-
+      {/*TODO: add an error boundary or check so this baarcode component doesn't crash everything*/}
+      {
+        visitor.barcodeId.length > 0 &&
+          <Barcode value={visitor.barcodeId} options={{height:20}} />    
+      }
+       
       <span>Name: {visitor.name}, info: {JSON.stringify(visitor)}</span>
 
       <button onClick={() => editVisitor({"visitor": visitor._id})}>Edit </button>
