@@ -12,6 +12,7 @@
     "@ericblade/quagga2": "^1.8.2",
     "bcrypt": "^5.0.1",
     "meteor-node-stubs": "^1.1.0",
+    "qrcode.react": "^3.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-jsbarcode": "^0.2.4",
