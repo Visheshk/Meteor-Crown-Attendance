@@ -7,7 +7,6 @@ export const UserLogger = ({visitors}) => {
   const [pageName, setPageName] = useState('');
   Session.set("thisVisitor", {});
 
-  console.log(visitors)
   const handleSubmitOld = e => {
     e.preventDefault();
     console.log(e.target.age.value);

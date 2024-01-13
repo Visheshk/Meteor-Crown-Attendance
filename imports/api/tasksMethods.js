@@ -42,6 +42,12 @@ Meteor.methods({
     return VisitorsCollection.findOne({barcodeId: barcodeId});
   },
 
+  'visitors.findByBarcode'(code) {
+    // console.log(code);
+    // console.log(VisitorsCollection.findOne({"barcodeId": code}));
+    return VisitorsCollection.findOne({"barcodeId": code});
+  },
+
   'visitors.insert'(name, age, gender, dob, notes) {
     // check(text, String);
 
