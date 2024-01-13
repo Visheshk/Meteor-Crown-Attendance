@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState, Fragment } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
-import Quagga from '@ericblade/quagga2'; 
+// import Quagga from '@ericblade/quagga2'; 
 import adapter from 'webrtc-adapter';
 import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection';
 import { Task } from './Task';
@@ -22,10 +22,14 @@ const makeNewBarcode = ({visitor}) => {
   Meteor.call('visitors.barUpdate', visitor);
 }
 
+
 const findByBarcode = ({barcode}) => {
   Meteor.call('visitors.findByBarcode', barcode);
 }
 
+// const findByBarcode = ({barcode}) => {
+//   Meteor.call('visitors.findByBarcode', barcode);
+// }
 
 // const editVis = ({visitor}) => {
 //   Meteor.call('visitors.barUpdate', visitor);
@@ -33,8 +37,9 @@ const findByBarcode = ({barcode}) => {
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
+  // const user = ""
 
-  const [hideCompleted, setHideCompleted] = useState(false);
+  // const [hideCompleted, setHideCompleted] = useState(false);
   const [camData, setCamData] = useState(0);
   const [stopStream, setStopStream] = useState(true);
 
@@ -51,6 +56,7 @@ export const App = () => {
     // setTimeout(() => closeModal(), 0);
   }
 
+  
   var video = document.getElementById('video');
   if(video && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
@@ -155,12 +161,11 @@ export const App = () => {
             </>
           ): (
             <>
-              <UserLogger />
-              <LoginForm />
+            <UserLogger />
+            <LoginForm />
+              <p> hi</p>
             </>
-          )};
-        
-          
+          )};       
           
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import Barcode from 'react-jsbarcode';
 
 export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
-  // console.log(visitor);
+  console.log(visitor);
   // JsBarcode("#barcode", "Hi world!");
 
   return (
@@ -14,6 +14,7 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
         readOnly
       />
       <Barcode value={visitor.barcodeId} options={{height:20}} />
+      <p> {}</p>
 
       <span>Name: {visitor.name}, info: {JSON.stringify(visitor)}</span>
 

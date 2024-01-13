@@ -14,6 +14,7 @@ WebApp.connectHandlers.use('/hello', (req, res, next) => {
   }
 })
 
+
 const randomString = function () {
   ss = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
   return ss.slice(ss.length-8, ss.length+1);
@@ -23,6 +24,22 @@ Meteor.methods({
   'visitors.findByName'(name) {
     console.log(VisitorsCollection.findOne({"name": name}));
     return VisitorsCollection.findOne({"name": name});
+
+  },
+
+  'barcode.makeNew' () {
+    barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*100));
+    barcodeId = barcodeId.slice(8, 15)
+    while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
+        barcodeId = String(new Date().getTime()) + String(Math.trunc(Math.random()*100));
+        barcodeId = barcodeId.slice(8, 15)
+    }
+    return barcodeId;
+  },
+
+  'visitors.findByBarcode'(barcodeId) {
+    console.log(barcodeId);
+    return VisitorsCollection.findOne({barcodeId: barcodeId});
   },
 
   'visitors.insert'(name, age, gender, dob, notes) {
@@ -38,7 +55,8 @@ Meteor.methods({
     // visCount = VisitorsCollection.find().count();
 
     // barcodeId = String(Math.trunc(Math.random()*1000)) + String(visCount).padStart(5,'0') + String(Math.trunc(Math.random()*1000));
-    barcodeId = randomString();
+
+    barcodeId = Meteor.call("barcode.makeNew");
 
     VisitorsCollection.insert({
       name: name,
@@ -57,12 +75,19 @@ Meteor.methods({
   'visitors.barUpdate' (id) {
     // console.log(id);
     
-    barcodeId = randomString();
+// <<<<<<< Updated upstream
+//     barcodeId = randomString();
+    
+//     // confirm that no one else has this barcodeId
+//     while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
+//         barcodeId = randomString();
+//     }
+// =======
+    barcodeId = Meteor.call("barcode.makeNew");
     
     // confirm that no one else has this barcodeId
-    while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
-        barcodeId = randomString();
-    }
+    
+// >>>>>>> Stashed changes
     
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
     return barcodeId;
