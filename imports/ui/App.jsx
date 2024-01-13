@@ -22,19 +22,6 @@ const makeNewBarcode = ({visitor}) => {
   Meteor.call('visitors.barUpdate', visitor);
 }
 
-
-const findByBarcode = ({barcode}) => {
-  Meteor.call('visitors.findByBarcode', barcode);
-}
-
-// const findByBarcode = ({barcode}) => {
-//   Meteor.call('visitors.findByBarcode', barcode);
-// }
-
-// const editVis = ({visitor}) => {
-//   Meteor.call('visitors.barUpdate', visitor);
-// }
-
 export const App = () => {
   const user = useTracker(() => Meteor.user());
   // const user = ""
@@ -42,6 +29,7 @@ export const App = () => {
   // const [hideCompleted, setHideCompleted] = useState(false);
   const [camData, setCamData] = useState(0);
   const [stopStream, setStopStream] = useState(true);
+  const [codeVisitor, setCodeVisitor] = useState({});
 
   const hideCompletedFilter = { isChecked: { $ne: true } };
 
@@ -91,6 +79,24 @@ export const App = () => {
 
     return { visitors, pendingTasksCount };
   });
+
+  async function checkBarcode (barcode) {
+    // console.log(camData);
+    // console.log(barcode);
+    // console.log(await findByBarcode(barcode));
+    Meteor.call('visitors.findByBarcode', barcode, function (err, res) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log(res);
+        setCodeVisitor(res);
+        // console.log()
+        return res;
+      }
+    });
+  }
+
 
   const pendingTasksTitle = `${
     pendingTasksCount ? ` (${pendingTasksCount})` : ''
@@ -147,12 +153,13 @@ export const App = () => {
                           //call visits.insert function
                           // if successful make border of image green
                           setCamData(result.text);
+                          checkBarcode(result.text);
                           // spotVisitor(result.text);
                         }
                         else {setCamData("Not Found")};
                       }}
                     />
-                    <h3>{camData}</h3>
+                    <h3>{camData} {JSON.stringify(codeVisitor)}</h3>
                 </Fragment>
               ) : (
                 <UserLogger visitors = {visitors}/>
