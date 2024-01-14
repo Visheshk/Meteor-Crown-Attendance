@@ -1,10 +1,10 @@
 import React from 'react';
-import * as ReactDOM from "react-dom";
+// import * as ReactDOM from "react-dom";
 
 import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+// import { render } from 'react-dom';
 import { App } from '/imports/ui/App';
-import { AppRoute } from '/imports/ui/AppRoute';
+// import { AppRoute } from '/imports/ui/AppRoute';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra'
 import './routes';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";

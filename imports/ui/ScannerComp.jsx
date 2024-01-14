@@ -11,17 +11,13 @@ export const ScannerComp = () => {
 		  height={200}
 		  onUpdate={(err, result) => {
 		    if (result) {
-		      //call visits.insert function
-		      // if successful make border of image green
 		      setCamData(result.text);
-		      // spotVisitor(result.text);
 		    }
 		    else {setCamData("Not Found")};
 		  }}
 		/>
 		<h3>{camData}</h3>
 		</>
-		
 	)
 }
 

@@ -5,12 +5,13 @@ import { mount } from 'react-mounter'
 import App from '../imports/ui/App'
 import AppRoute from '../imports/ui/AppRoute'
 import ScannerComp from '../imports/ui/ScannerComp'
+import LoginForm from '../imports/ui/LoginForm'
 
 FlowRouter.route("/", {
 	name: 'index',
 	action () {
-	    mount( App, {
-	      content: <ScannerComp />
+	    mount( AppRoute, {
+	      content: <App />
 	    })
 	    console.log("route>?");
 	}
@@ -23,5 +24,14 @@ FlowRouter.route("/room", {
 	      content: <ScannerComp />
 	    })
 	    console.log("route>?");
+	}
+})
+
+FlowRouter.route("/login", {
+	name: 'login',
+	action () {
+	    mount( AppRoute, {
+	      content: <LoginForm />
+	    })
 	}
 })
