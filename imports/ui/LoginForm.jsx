@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
-import Blaze from 'meteor/gadicc:blaze-react-component';
-
+// import Blaze from 'meteor/gadicc:blaze-react-component';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra'
 
 export const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -9,8 +9,15 @@ export const LoginForm = () => {
 
   const submit = e => {
     e.preventDefault();
-
-    Meteor.loginWithPassword(username, password);
+    Meteor.loginWithPassword(username, password, function (err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        // console.log("login success!");
+        FlowRouter.go("/");
+      }
+    });
   };
 
   return (
@@ -44,3 +51,5 @@ export const LoginForm = () => {
     </form>
   );
 };
+
+export default LoginForm
