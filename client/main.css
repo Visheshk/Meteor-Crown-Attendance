@@ -180,6 +180,11 @@ header {
   background-color: #62807e;
 }
 
+.form-field-title {
+  padding-right: 10px;
+  margin-bottom: 10px;
+}
+
 .user {
   display: flex;
 
@@ -198,4 +203,52 @@ header {
   align-items: center;
 
   font-weight: bold;
+}
+
+/* two-column view -- when there is a successful barcode scan */
+.split-screen {
+  display: flex;
+}
+
+.scanner-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border: 5px solid rgb(237, 243, 247);
+  border-radius: 5px;
+  background-color: rgb(237, 243, 247);
+  margin: 10px;
+}
+
+.barcode-column {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  border: 5px solid rgb(237, 243, 247);
+  border-radius: 5px;
+  background-color: rgb(237, 243, 247);
+  margin: 10px;
+}
+
+.barcode {
+  font-size: 10px;
+}
+
+
+/* single screen view -- Not Found
+.centered-scanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  padding-top: 20px;
+} */
+
+video {
+  width: 500px;
+  height: 200px;
 }
