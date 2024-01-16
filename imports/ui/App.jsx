@@ -145,24 +145,8 @@ export const App = () => {
                     ))}
                   </ul>
 
-
-
-                {/* {camData !== "Not Found" ? (
                   <div className='split-screen'>
                     <div className='scanner-column'>
-                    <BarcodeScannerComponent
-                      onUpdate={(err, result) => {
-                        if (result) setCamData(result.text);
-                        else setCamData("Not Found");
-                      }}
-                    />
-                    </div>
-                    <div className="barcode-column">
-                      <h3>{camData}</h3>
-                    </div>
-                  </div>
-                ) : (
-                  <div className='centered-scanner'> 
                     <BarcodeScannerComponent
                       onUpdate={(err, result) => {
                         if (result) {
@@ -175,8 +159,13 @@ export const App = () => {
                         else {setCamData("Not Found")};
                       }}
                     />
-                    <h3>{camData} {JSON.stringify(codeVisitor)} </h3>
-                    <UserLogger visitors = {visitors}/>
+                    </div>
+                    <div className="barcode-column">
+                      <h3>{camData} {JSON.stringify(codeVisitor)} </h3>
+                      <UserLogger visitors = {visitors}/>
+                    </div>
+                  </div>
+                  
 
                 </Fragment>
               ) : (
