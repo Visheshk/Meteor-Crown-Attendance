@@ -12,10 +12,10 @@ export const TaskForm = () => {
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
-      <input type="text" name="name" placeholder="name" required /> 
-      <input type="number" name="age" placeholder="age" required />
-      <input type="text" name="gender" placeholder="gender" required /> 
-      Date of Birth: <input type="date" name="dob" required /> 
+      <p className='form-field-title'>Name: <input type="text" name="name" placeholder="name" required /> </p>
+      <p className='form-field-title'>Age: <input type="number" name="age" placeholder="age" required /></p>
+      <p className='form-field-title'>Gender: <input type="text" name="gender" placeholder="gender" required /></p>
+      <p className='form-field-title'>Date of Birth: <input type="date" name="dob" required /></p>
       <button type="submit">Add Visitor</button>
     </form>
 

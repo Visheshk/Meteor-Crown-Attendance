@@ -144,10 +144,26 @@ export const App = () => {
                       />
                     ))}
                   </ul>
-                  
-                   <BarcodeScannerComponent
-                      width={500}
-                      height={200}
+
+
+
+                {/* {camData !== "Not Found" ? (
+                  <div className='split-screen'>
+                    <div className='scanner-column'>
+                    <BarcodeScannerComponent
+                      onUpdate={(err, result) => {
+                        if (result) setCamData(result.text);
+                        else setCamData("Not Found");
+                      }}
+                    />
+                    </div>
+                    <div className="barcode-column">
+                      <h3>{camData}</h3>
+                    </div>
+                  </div>
+                ) : (
+                  <div className='centered-scanner'> 
+                    <BarcodeScannerComponent
                       onUpdate={(err, result) => {
                         if (result) {
                           //call visits.insert function
