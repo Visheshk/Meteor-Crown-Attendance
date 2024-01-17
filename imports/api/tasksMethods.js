@@ -3,14 +3,29 @@ import { check } from 'meteor/check';
 import { TasksCollection, VisitorsCollection, VisitsCollection } from '/imports/db/TasksCollection';
 import {WebApp} from 'meteor/webapp';
 
-WebApp.connectHandlers.use('/hello', (req, res, next) => {
+WebApp.connectHandlers.use('/hello', async (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type");
+
   res.writeHead(200);
-  res.end(`Hello world from: ${Meteor.release}`);
+
   qq = req.query;
+  console.log(qq["kind"]);
 
   if (qq["kind"] == "barcodeDataUpdate") {
     // console.log(qq.fieldName);
     console.log(Meteor.call("visitors.barcodeDataUpdate", qq.barcodeId, qq.fieldName, qq.fieldVal));
+    res.end(`Hello world from: ${Meteor.release}`);
+  }
+  else if (qq["kind"] == "barcodeSearch") {
+    // console.log("search attempt");
+    barcodeRes = await(Meteor.call("visitors.findByBarcode", qq.barcodeId))
+    // console.log(barcodeRes);
+    if (barcodeRes)
+      res.end(JSON.stringify(barcodeRes));
+    else {
+      res.end(JSON.stringify("not found"));
+    }
   }
 })
 
