@@ -5,6 +5,7 @@ import {WebApp} from 'meteor/webapp';
 
 WebApp.connectHandlers.use('/hello', (req, res, next) => {
   res.writeHead(200);
+  
   res.end(`Hello world from: ${Meteor.release}`);
   qq = req.query;
 
@@ -39,7 +40,7 @@ Meteor.methods({
 
   'visitors.findByBarcode'(barcodeId) {
     console.log(barcodeId);
-    return VisitorsCollection.findOne({barcodeId: barcodeId});
+    return VisitorsCollection.findOne({"barcodeId": barcodeId});
   },
 
   'visitors.findByBarcode'(code) {
@@ -79,22 +80,8 @@ Meteor.methods({
   },
 
   'visitors.barUpdate' (id) {
-    // console.log(id);
-    
-// <<<<<<< Updated upstream
-//     barcodeId = randomString();
-    
-//     // confirm that no one else has this barcodeId
-//     while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
-//         barcodeId = randomString();
-//     }
-// =======
-    barcodeId = Meteor.call("barcode.makeNew");
-    
-    // confirm that no one else has this barcodeId
-    
-// >>>>>>> Stashed changes
-    
+
+    barcodeId = Meteor.call("barcode.makeNew");    
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
     return barcodeId;
   },
