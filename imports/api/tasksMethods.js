@@ -14,8 +14,9 @@ WebApp.connectHandlers.use('/hello', async (req, res, next) => {
 
   if (qq["kind"] == "barcodeDataUpdate") {
     // console.log(qq.fieldName);
+    // console.log(JSON.stringify(qq));
     console.log(Meteor.call("visitors.barcodeDataUpdate", qq.barcodeId, qq.fieldName, qq.fieldVal));
-    res.end(`Hello world from: ${Meteor.release}`);
+    res.end(JSON.stringify(`Hello world from: ${Meteor.release}`));
   }
   else if (qq["kind"] == "barcodeSearch") {
     // console.log("search attempt");
@@ -94,27 +95,16 @@ Meteor.methods({
   },
 
   'visitors.barUpdate' (id) {
-    // console.log(id);
-    
-// <<<<<<< Updated upstream
-//     barcodeId = randomString();
-    
-//     // confirm that no one else has this barcodeId
-//     while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
-//         barcodeId = randomString();
-//     }
-// =======
     barcodeId = Meteor.call("barcode.makeNew");
     
-    // confirm that no one else has this barcodeId
-    
-// >>>>>>> Stashed changes
+
     
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
     return barcodeId;
   },
 
   'visitors.barcodeDataUpdate' (barcodeId, field, value) {
+    console.log(field, value);
     newData = {};
     newData[field] = value;
     // console.log("bcd up")
@@ -122,9 +112,7 @@ Meteor.methods({
     {
       barcodeId: barcodeId
     }, {
-      $set: {
-        newData
-      }
+      $set: newData
     },
     {upsert: true})
   },
