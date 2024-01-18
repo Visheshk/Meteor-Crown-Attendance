@@ -35,3 +35,12 @@ FlowRouter.route("/login", {
 	    })
 	}
 })
+
+FlowRouter.route("/scoreboard", {
+	name: 'scoreboard',
+	action () {
+	    mount( AppRoute, {
+	      content: <ScoreBoard />
+	    })
+	}
+})
