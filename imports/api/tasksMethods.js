@@ -90,7 +90,7 @@ Meteor.methods({
       index: visCount,
       barcodeId: barcodeId,
       createdAt: new Date(),
-      userId: this.userId,
+      insertedBy: this.userId,
     });
   },
 
