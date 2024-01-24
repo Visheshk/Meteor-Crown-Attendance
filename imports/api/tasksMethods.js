@@ -3,15 +3,30 @@ import { check } from 'meteor/check';
 import { TasksCollection, VisitorsCollection, VisitsCollection } from '/imports/db/TasksCollection';
 import {WebApp} from 'meteor/webapp';
 
-WebApp.connectHandlers.use('/hello', (req, res, next) => {
+WebApp.connectHandlers.use('/hello', async (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type");
+
   res.writeHead(200);
-  
-  res.end(`Hello world from: ${Meteor.release}`);
+
   qq = req.query;
+  console.log(qq["kind"]);
 
   if (qq["kind"] == "barcodeDataUpdate") {
     // console.log(qq.fieldName);
+    // console.log(JSON.stringify(qq));
     console.log(Meteor.call("visitors.barcodeDataUpdate", qq.barcodeId, qq.fieldName, qq.fieldVal));
+    res.end(JSON.stringify(`Hello world from: ${Meteor.release}`));
+  }
+  else if (qq["kind"] == "barcodeSearch") {
+    // console.log("search attempt");
+    barcodeRes = await(Meteor.call("visitors.findByBarcode", qq.barcodeId))
+    // console.log(barcodeRes);
+    if (barcodeRes)
+      res.end(JSON.stringify(barcodeRes));
+    else {
+      res.end(JSON.stringify("not found"));
+    }
   }
 })
 
@@ -75,18 +90,33 @@ Meteor.methods({
       index: visCount,
       barcodeId: barcodeId,
       createdAt: new Date(),
-      userId: this.userId,
+      insertedBy: this.userId,
     });
   },
 
   'visitors.barUpdate' (id) {
-
-    barcodeId = Meteor.call("barcode.makeNew");    
+    // console.log(id);
+    
+// <<<<<<< Updated upstream
+//     barcodeId = randomString();
+    
+//     // confirm that no one else has this barcodeId
+//     while (VisitorsCollection.find({barcodeId: barcodeId}).count() > 0) {
+//         barcodeId = randomString();
+//     }
+// =======
+    barcodeId = Meteor.call("barcode.makeNew");
+    
+    // confirm that no one else has this barcodeId
+    
+// >>>>>>> Stashed changes
+    
     VisitorsCollection.update({_id: id}, {$set: {barcodeId: barcodeId}});
     return barcodeId;
   },
 
   'visitors.barcodeDataUpdate' (barcodeId, field, value) {
+    console.log(field, value);
     newData = {};
     newData[field] = value;
     // console.log("bcd up")
@@ -94,9 +124,7 @@ Meteor.methods({
     {
       barcodeId: barcodeId
     }, {
-      $set: {
-        newData
-      }
+      $set: newData
     },
     {upsert: true})
   },
