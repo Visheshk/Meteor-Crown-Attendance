@@ -26,7 +26,7 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
       }
       </div>
        
-      <span>Name: {visitor.name}, dob: {visitor.dob}</span>
+      <span>Name: {visitor.name}, dob: {visitor.dob}, {JSON.stringify(visitor)}</span>
 
       <button onClick={() => editVisitor({"visitor": visitor._id})}>Edit </button>
       <button onClick={() => makeNewBarcode({"visitor": visitor._id})}>Make new barcode</button>

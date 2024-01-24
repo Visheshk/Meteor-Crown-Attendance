@@ -127,11 +127,10 @@ export const App = () => {
                     {user.username || user.profile.name} 🚪
                   </div>
 
-                  <TaskForm />
-
-
                   {isLoading && <div className="loading">loading...</div>}
 
+                  <TaskForm />
+                  
                   <ul className="tasks">
                     {visitors.map(visitor => (
                       <Task
@@ -170,14 +169,13 @@ export const App = () => {
                 </Fragment>
               ) : (
                 <>
-                  <p>test</p>
-                  <LoginForm />
                 </>
               )
             }
             </>
           ): (
             <>
+            <TaskForm />
             <LoginForm />
               <p> hi</p>
             </>
