@@ -6,6 +6,7 @@ import App from '../imports/ui/App'
 import AppRoute from '../imports/ui/AppRoute'
 import ScannerComp from '../imports/ui/ScannerComp'
 import LoginForm from '../imports/ui/LoginForm'
+import ScoreBoard from '../imports/ui/ScoreBoard'
 
 FlowRouter.route("/", {
 	name: 'index',
