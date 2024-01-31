@@ -37,6 +37,8 @@ export const ScoreBoard = () => {
 		const visitors = VisitorsCollection.find({}).fetch();
 		// console.log(visitors);
 		const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
+		console.log(visitors); // Check the barcodeId for each visitor
+
 	
 		return { visitors, pendingTasksCount };
 	});
@@ -52,10 +54,10 @@ export const ScoreBoard = () => {
 			headerName: 'QR Code',
 			width: 210,
 			renderCell: (params) => (
-				<QRCodeSVG value={params.row.barcodeId} />
+				<QRCodeSVG value={visitors._id} />
 			),
-		}
-		// ... add other columns as needed
+		},
+		{ field: 'date', headerName: 'Date Created', width: 110 },
 	];
 	
 	  // Transform visitors data for DataGrid
@@ -65,7 +67,7 @@ export const ScoreBoard = () => {
 		age: visitor.age,
 		gender: visitor.gender,
 		qrcode: visitor.qrcode,
-		// ... map other fields as needed
+		date: visitor.createdAt
 	}));
 
 	return (
@@ -75,29 +77,11 @@ export const ScoreBoard = () => {
 			columns={columns}
 			pageSize={5}
 			loading={isLoading}
-			checkboxSelection
 			rowHeight={180}
 		  />
 		</div>
 	  );
 	}
-
-	// const [camData, setCamData] = useState(0);
-// 	return (
-// 		<ul className="tasks">
-// 		{visitors.map(visitor => (
-// 			<Task
-// 			key={visitor._id}
-// 			visitor={visitor}
-// 			onAddVisit={addVisit}
-// 			makeNewBarcode={makeNewBarcode}
-// 			// onCheckboxClick={toggleChecked}
-// 			// onDeleteClick={deleteTask}
-// 			/>
-// 		))}
-// 		</ul>
-// 	)
-// }
 
 export default ScoreBoard
 
