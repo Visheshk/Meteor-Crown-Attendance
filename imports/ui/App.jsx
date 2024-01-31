@@ -27,9 +27,9 @@ export const App = () => {
   // const user = ""
 
   // const [hideCompleted, setHideCompleted] = useState(false);
-  const [camData, setCamData] = useState(0);
-  const [stopStream, setStopStream] = useState(true);
-  const [codeVisitor, setCodeVisitor] = useState({});
+  // const [camData, setCamData] = useState(0);
+  // const [stopStream, setStopStream] = useState(true);
+  // const [codeVisitor, setCodeVisitor] = useState({});
 
   const hideCompletedFilter = { isChecked: { $ne: true } };
 
@@ -144,26 +144,7 @@ export const App = () => {
                     ))}
                   </ul>
 
-                  <div className='split-screen'>
-                    <div className='scanner-column'>
-                    <BarcodeScannerComponent
-                      onUpdate={(err, result) => {
-                        if (result) {
-                          //call visits.insert function
-                          // if successful make border of image green
-                          setCamData(result.text);
-                          checkBarcode(result.text);
-                          // spotVisitor(result.text);
-                        }
-                        else {setCamData("Not Found")};
-                      }}
-                    />
-                    </div>
-                    <div className="barcode-column">
-                      <h3>{camData} {JSON.stringify(codeVisitor)} </h3>
-                      <UserLogger visitors = {visitors}/>
-                    </div>
-                  </div>
+                  
                   
 
                 </Fragment>
