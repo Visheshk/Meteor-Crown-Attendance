@@ -7,6 +7,7 @@ import AppRoute from '../imports/ui/AppRoute'
 import ScannerComp from '../imports/ui/ScannerComp'
 import LoginForm from '../imports/ui/LoginForm'
 import ScoreBoard from '../imports/ui/ScoreBoard'
+import MicrobitTalker from '../imports/ui/MicrobitTalker'
 
 FlowRouter.route("/", {
 	name: 'index',
@@ -23,6 +24,16 @@ FlowRouter.route("/room", {
 	action () {
 	    mount( AppRoute, {
 	      content: <ScannerComp />
+	    })
+	    console.log("route>?");
+	}
+})
+
+FlowRouter.route("/microbit", {
+	name: 'micro',
+	action () {
+	    mount( AppRoute, {
+	      content: <MicrobitTalker />
 	    })
 	    console.log("route>?");
 	}
