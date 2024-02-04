@@ -9,6 +9,7 @@ import { Task } from './Task';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
 import { UserLogger } from './UserLogger';
+import { ScannerComp } from './ScannerComp';
 
 const toggleChecked = ({ _id, isChecked }) =>
   Meteor.call('tasks.setIsChecked', _id, !isChecked);
@@ -146,10 +147,11 @@ export const App = () => {
 
                   
                   
-
+                  <ScannerComp />
                 </Fragment>
               ) : (
                 <>
+
                 </>
               )
             }
@@ -158,6 +160,7 @@ export const App = () => {
             <>
             <TaskForm />
             <LoginForm />
+            <ScannerComp />
               <p> hi</p>
             </>
           )};       
