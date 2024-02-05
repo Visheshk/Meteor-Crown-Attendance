@@ -1,37 +1,50 @@
-import React, { useState} from 'react';
+import React, { useState, useMemo} from 'react';
 import { ScannerComp } from './ScannerComp';
+import { VisitorLogs } from './VisitorLogs';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
+import { useTracker } from 'meteor/react-meteor-data';
+
+import { ScoreCollection } from '/imports/db/TasksCollection';
 
 export const Room = () => {
-	const [pageFeature, setPageFeature] = useState('');
+	const [pageActivity, setPageActivity] = useState('');
 	const [eventId, setEventId] = useState('');
-	const [featureVal, setFeatureVal] = useState('');
+	const [activityScore, setActivityScore] = useState('');
 	const [userId, setUserId] = useState('');
 	const [toastOpen, setToastOpen] = useState(false);
 	const [errorText, setErrorText] = useState('');
+	// const [userScores, setUserScores] = useState([]);
+	const [scoreDisplay, setScoreDisplay] = useState(false);
 	//step 1: get log code to work
 
 		//
 	//add a table inside scanner comp that also retrieves event specific logs
 
+	// const { scores } = useTracker(() => {
+  	const handler = Meteor.subscribe('scorelogs');	
+  	const scores = ScoreCollection.find({}).fetch();
+  // 	console.log(scores);
+  // 	return { scores };
+  // });
+
 	const postLog = function () {
-		console.log(featureVal);
-		console.log(userId);
+		// console.log(featureVal);
+		// console.log(userId);
 		let errText = '';
 		if (eventId == '') {
 			errText += ' no event id! \n';
 		}
-		if (featureVal == '') {
-			errText += ' no feature value! \n';
+		if (activityScore == '') {
+			errText += ' no score! \n';
 		}
 		if (userId == '') {
 			errText += ' no user! \n';
 		}
-		if (pageFeature == '') {
-			errText += ' no feature name! \n';
+		if (pageActivity == '') {
+			errText += ' no activity name name! \n';
 		}
 		if (errText != '') {
 			setErrorText(errText);
@@ -40,8 +53,9 @@ export const Room = () => {
 		else {
 			dd = new Date();
 			log = { 
-				"feature": pageFeature, 
-				"score": featureVal, 
+				"activity": pageActivity, 
+				"eventId": eventId,
+				"score": activityScore, 
 				"epochTime": dd.getTime(), 
 				"userBarcode": userId,
 				"timestamp": dd.toISOString()
@@ -61,12 +75,24 @@ export const Room = () => {
 	const errorNotify = function () {
 		
 	}
+	const userScores = useMemo(() => {
+			return scores.filter(x => {return  x.eventId == eventId && x.userBarcode == userId});		
+		}, [userId, eventId, scores])
+	// if (userId != '' && pageActivity != '' && eventId != '') {
+		
+		// if (uss.length > 0){
+		// 	// setScoreDisplay(true);
+		// 	console.log(uss);
+		// 	// setUserScores(uss);
+			
+		// }
+	// }
 
 	return (
-		<Grid container direction="column">
-			<Grid container direction="row">
+		<Grid container item direction="column" spacing={2} justifyContent="space-around" >
+			<Grid container item direction="row">
 				<Grid container item md={4}>
-					<TextField id="featureField" label="Feature" variant="standard" onChange={event => setPageFeature(event.target.value)} />
+					<TextField id="activityField" label="Activity" variant="standard" onChange={event => setPageActivity(event.target.value)} />
 				</Grid>
 					<Grid container item md={3}>
 						<TextField id="eventID" label="Event ID" variant="standard" onChange={event => setEventId(event.target.value)}/>
@@ -79,11 +105,13 @@ export const Room = () => {
 				<ScannerComp spotUser = {childUserIdUpdate}/>
 			</Grid>
 			<Grid container item md={4}>
-				
+			
+				<VisitorLogs scores={userScores}/>
+			
 			</Grid>
 			<Grid container item  direction="row">
 				<Grid container item md={3}>
-					<TextField id="featureValue" label="Feature value" variant="standard" onChange={event => setFeatureVal(event.target.value)}/>
+					<TextField id="activityScore" label="Activity Score" variant="standard" onChange={event => setActivityScore(event.target.value)}/>
 				</Grid>
 				<Grid container item md={2}>
 					<Button id="logData" onClick={postLog} variant="outlined">Log</Button>
