@@ -4,7 +4,8 @@ import { mount } from 'react-mounter'
 
 import App from '../imports/ui/App'
 import AppRoute from '../imports/ui/AppRoute'
-import ScannerComp from '../imports/ui/ScannerComp'
+import Room from '../imports/ui/Room'
+// import ScannerComp from '../imports/ui/ScannerComp'
 import LoginForm from '../imports/ui/LoginForm'
 import ScoreBoard from '../imports/ui/ScoreBoard'
 import MicrobitTalker from '../imports/ui/MicrobitTalker'
@@ -23,7 +24,7 @@ FlowRouter.route("/room", {
 	name: 'room2',
 	action () {
 	    mount( AppRoute, {
-	      content: <ScannerComp />
+	      content: <Room />
 	    })
 	    console.log("route>?");
 	}

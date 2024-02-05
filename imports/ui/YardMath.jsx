@@ -3,9 +3,8 @@ import React, { useState, Fragment } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import microbit from 'microbit-web-bluetooth'
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
+
 import Grid from '@mui/material/Grid';
 import { DeviceCollection } from '/imports/db/TasksCollection';
 import { DataGrid } from '@mui/x-data-grid';

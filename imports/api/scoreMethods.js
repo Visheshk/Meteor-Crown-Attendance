@@ -4,6 +4,13 @@ import {
   ScoreCollection,
   DeviceCollection 
 } from '/imports/db/TasksCollection';
+import {WebApp} from 'meteor/webapp';
+
+WebApp.connectHandlers.use('/hello', async (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.writeHead(200);
+
+})
 
 const randomString = function () {
   ss = String(new Date().getTime()) + String(Math.trunc(Math.random()*1000));
