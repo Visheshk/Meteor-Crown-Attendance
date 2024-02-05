@@ -29,4 +29,4 @@ ostrio:flow-router-extra
 kadira:blaze-layout
 accounts-ui@1.4.2
 gadicc:blaze-react-component
-session@1.2.1
+session
