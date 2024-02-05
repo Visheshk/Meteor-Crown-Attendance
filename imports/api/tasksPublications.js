@@ -3,7 +3,8 @@ import {
   TasksCollection, 
   VisitorsCollection, 
   VisitsCollection,
-  DeviceCollection 
+  DeviceCollection,
+  ScoreCollection
 } from '/imports/db/TasksCollection';
 
 Meteor.publish('tasks', function publishTasks() {
@@ -23,4 +24,9 @@ Meteor.publish('visits', function publishTasks() {
 Meteor.publish('devicelogs', function publishTasks() {
   // console.log(VisitorsCollection.find({ }));
   return DeviceCollection.find({ });
+});
+
+Meteor.publish('scorelogs', function publishTasks() {
+  // console.log(VisitorsCollection.find({ }));
+  return ScoreCollection.find({ });
 });

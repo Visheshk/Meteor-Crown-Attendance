@@ -4,6 +4,7 @@ import { TasksCollection, VisitorsCollection } from '/imports/db/TasksCollection
 import { ServiceConfiguration } from 'meteor/service-configuration';
 import '/imports/api/tasksMethods';
 import '/imports/api/deviceMethods';
+import '/imports/api/scoreMethods';
 import '/imports/api/tasksPublications';
 
 const insertTask = (taskText, user) =>

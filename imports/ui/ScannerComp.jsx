@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Grid from '@mui/material/Grid';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 
 export const ScannerComp = ({spotUser}) => {
@@ -34,8 +35,8 @@ export const ScannerComp = ({spotUser}) => {
 	  }
 
 	return (
-		<div className='split-screen'>
-        <div className='scanner-column'>
+		<Grid container spacing={4}>
+			<Grid container item md={3}>
         <BarcodeScannerComponent
           onUpdate={(err, result) => {
             if (result) {
@@ -45,12 +46,12 @@ export const ScannerComp = ({spotUser}) => {
             else {setCamData("Not Found")};
           }}
         />
-        </div>
-        <div className="barcode-column">
-          <h3>{JSON.stringify(codeVisitor)} </h3>
-          
-        </div>
-      </div>
+      </Grid>
+      <Grid container item md={2}>
+        <h3>{JSON.stringify(codeVisitor)} </h3>
+        
+      </Grid>
+    </Grid>
 	)
 }
 
