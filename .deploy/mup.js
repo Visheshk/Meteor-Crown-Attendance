@@ -2,17 +2,23 @@ module.exports = {
   servers: {
     one: {
       // TODO: set host address, username, and authentication method
-      host: '157.245.249.73',
+      // host: '157.245.249.73',    old?
+      // host: '142.93.118.115',    //nextcloud
+      // host: '167.99.224.18',  //salsrc
+      host: '161.35.142.168',
       username: 'root',
-      // pem: './path/to/pem'
+      // pem: '/Users/vkumar/.ssh/id_rsa',
+      // passphrase: 'qezcad',
+      // password: 'qezcad'
       password: 'o2tdmuT37aY#a'
+      // password: 'g8hY^vGGMBAbyYC7ok$f'
       // or neither for authenticate from ssh-agent
     }
   },
 
   app: {
     // TODO: change app name and path
-    name: 'bulls-data',
+    name: 'combine',
     path: '../',
 
     servers: {
@@ -26,7 +32,7 @@ module.exports = {
     env: {
       // TODO: Change to your app's url
       // If you are using ssl, it needs to start with https://
-      ROOT_URL: 'https://bulls.visheshk.net',
+      ROOT_URL: 'https://combine.visheshk.net',
       MONGO_URL: 'mongodb://mongodb/meteor',
       MONGO_OPLOG_URL: 'mongodb://mongodb/local',
     },
@@ -52,7 +58,7 @@ module.exports = {
   // app when there are several apps
 
   proxy: {
-    domains: 'bulls.visheshk.net',
+    domains: 'combine.visheshk.net',
 
     ssl: {
       // Enable Let's Encrypt

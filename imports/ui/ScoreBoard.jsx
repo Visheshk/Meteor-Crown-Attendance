@@ -86,7 +86,7 @@ export const ScoreBoard = () => {
 	
 	const rows = scores.map(score => ({
 		id: score._id, // id is a required field for DataGrid
-		name: score.userBarcode,
+		name: score.userInfo.name,
 		sport: score.activity,
 		score: score.score,
 		event: score.eventId,

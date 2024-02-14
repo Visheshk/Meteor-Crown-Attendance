@@ -16,6 +16,7 @@ export const Room = () => {
 	const [eventId, setEventId] = useState(Session.get("eventId"));
 	const [activityScore, setActivityScore] = useState('');
 	const [userId, setUserId] = useState('');
+	const [userInfo, setUserInfo] = useState({});
 	const [toastOpen, setToastOpen] = useState(false);
 	const [errorText, setErrorText] = useState('');
 	// const [pageFeatures, setPageFeatures] = useState(false);
@@ -78,6 +79,7 @@ export const Room = () => {
 				"score": activityScore, 
 				"epochTime": dd.getTime(), 
 				"userBarcode": userId,
+				"userInfo": userInfo,
 				"timestamp": dd.toISOString()
 			 };
 			Meteor.call('score.addLog', log)
@@ -91,8 +93,12 @@ export const Room = () => {
 
 	
 
-	const childUserIdUpdate = (data) => {
-		setUserId(data);
+	const childUserIdUpdate = ({code, data}) => {
+		setUserId(code);
+		setUserInfo(data);
+		console.log(data);
+		console.log(userInfo);
+		console.log(userId, userInfo);
 	}
 	const handleClose = (event) => {
     setToastOpen(false);
@@ -115,7 +121,7 @@ export const Room = () => {
 	}
 	const userScores = useMemo( () => {	
 			uss = scores.filter(x => {return  x.eventId == eventId && x.activity == pageActivity});
-			console.log(scores, uss, eventId);
+			// console.log(scores, uss, eventId);
 			// setRenderReq(renderReq + 1);
 			return  uss;
 		}, [pageActivity, eventId, scores] )
@@ -183,7 +189,7 @@ export const Room = () => {
 
 			<Grid container item >
 				<Grid container item md={6}>
-					<VisitorLogs scores={userScores}/>
+					<VisitorLogs scores={userScores} updateReq={renderReq}/>
 						{/*{userScores.map(score => (
 							"activity: " + score.activity + "\n score: " + score.score
 						))}*/}

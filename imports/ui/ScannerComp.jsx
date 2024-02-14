@@ -23,12 +23,12 @@ export const ScannerComp = ({spotUser}) => {
         console.log(err);
       }
       else {
-        // console.log(res);
+        console.log(res);
         // console.log("setting code visitor");
         setCodeVisitor(res);
         // if (this.props){
         	// console.log(this.props);
-	        spotUser(barcode);
+        spotUser({code: barcode, data: res});
         // }
         return res;
       }
