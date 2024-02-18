@@ -23,57 +23,19 @@ export const ScoreBoard = () => {
 		Meteor.call('visitors.barUpdate', visitor);
 	  }	  
 	
-  	// const { scores } = useTracker(() => {
-  	// 	return ScoreCollection.find({}).fetch()
-  	// });
-
 	const { scores, isLoading } = useTracker(() => {
 		const noDataAvailable = { scores: [] };
 		if (!Meteor.user()) {
 		  return noDataAvailable;
 		}
-		// const handler = Meteor.subscribe('tasks');
-		// const handler = Meteor.subscribe('visitors');
 		const handler = Meteor.subscribe('scorelogs');
 	
 		if (!handler.ready()) {
 		  return { ...noDataAvailable, isLoading: true };
 		}
-	
-		const scores = ScoreCollection.find({}).fetch();
-		// console.log(visitors);
-		// const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
-		// console.log(visitors); // Check the barcodeId for each visitor
-
-	
+		const scores = ScoreCollection.find({}).fetch();	
 		return { scores};
 	});
-
-	  // Define columns for DataGrid
-	  
-	// const columns = [
-	// 	{ field: 'name', headerName: 'Name', width: 150 },
-	// 	{ field: 'age', headerName: 'Age', type: 'number', width: 110 },
-	// 	{ field: 'gender', headerName: 'Gender', width: 110 },
-	// 	{
-	// 		field: 'qrcode',
-	// 		headerName: 'QR Code',
-	// 		width: 210,
-	// 		renderCell: (params) => (
-	// 			<QRCodeSVG value={visitors._id} />
-	// 		),
-	// 	},
-	// 	{ field: 'date', headerName: 'Date Created', width: 110 },
-	// ];
-
-	// const rows = visitors.map(visitor => ({
-	// 	id: visitor._id, // id is a required field for DataGrid
-	// 	name: visitor.name,
-	// 	age: visitor.age,
-	// 	gender: visitor.gender,
-	// 	qrcode: visitor.qrcode,
-	// 	date: visitor.createdAt
-	// }));
 
 	const columns = [
 		{ field: 'sport', headerName: 'Sport', width: 75 },

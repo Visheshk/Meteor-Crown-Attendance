@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import microbit from 'microbit-web-bluetooth'
 import Button from '@mui/material/Button';
@@ -13,25 +13,40 @@ export const MicrobitTalker = () => {
 	const [mbData, setMbData] = useState([]);
 	const [dataField, setDataField] = useState('');
 	const [pageField, setPageField] = useState('');
+	const stateRef = useRef();
+	stateRef.current=pageField;
 
 	const uartMessage = function (event) {
 		console.log(JSON.stringify(event.detail, null, 2));
-		let dd = new Date();
-		if (microbitMessage == "3") {
-			let newLog = {
-				"epochTime": dd.getTime(),
-				"timestamp": dd.toISOString(),
-				"microbitMessage": event.detail,
-				"pageField": pageField
-			}
-			mbData.push(newLog);
-			Meteor.call('device.addLog', newLog);
-			console.log(mbData);
-		}
+		setDataField(event.detail);
+		postData();
 	}
 
-		const handleTextInputChange = event => {
+	const buttonPress = function (event) {
+		// console.log(JSON.stringify(event, null, 2));
+		// console.log(dataField, pageField);
+		// console.log(stateRef);
+
+		if (event.detail == 0) {
+			console.log("a press");
+			if (event.type == "buttonastatechanged") {
+				setDataField("a press");
+			}
+			else if (event.type == "buttonbstatechanged") {
+				setDataField("b press");
+			}
+			postData()
+		}
+		else {
+			console.log(event)
+		}
+		// console.log(event);
+		// console.log(button);
+	}
+
+		const pageFieldChange = event => {
         setPageField(event.target.value);
+        // console.log(pageField);
     };
 
     const handleValueChange = event => {
@@ -40,12 +55,13 @@ export const MicrobitTalker = () => {
 
     const postData = event => {
     	console.log(dataField, pageField);
+    	
     	let dd = new Date();
     	let newLog = {
 				"epochTime": dd.getTime(),
 				"timestamp": dd.toISOString(),
-				"microbitMessage": event.detail,
-				"pageField": pageField
+				"microbitMessage": dataField,
+				"pageField": stateRef.current
 			}
 
 			Meteor.call('device.addLog', newLog);
@@ -54,17 +70,22 @@ export const MicrobitTalker = () => {
 
 	async function connectBit() {
 		const device = await microbit.requestMicrobit(window.navigator.bluetooth);
-		console.log(device);
+		// console.log(device);
 		await setBitDevice(device);
-		console.log(device);
+		// console.log(device);
 		if (device) {
 			const services = await microbit.getServices(device);
       if (services.deviceInformationService) {
-          console.log(await services.deviceInformationService.readDeviceInformation());
+          // console.log(await services.deviceInformationService.readDeviceInformation());
       }
       if (services.uartService) {
           services.uartService.addEventListener("receiveText", uartMessage);
           await services.uartService.send(new Uint8Array([104, 101, 108, 108, 111, 58])); // hello:
+      }
+
+      if (services.buttonService) {
+      	services.buttonService.addEventListener("buttonastatechanged", buttonPress, "a");
+        services.buttonService.addEventListener("buttonbstatechanged", buttonPress, "b");
       }
 
 		}
@@ -86,18 +107,18 @@ export const MicrobitTalker = () => {
 					<Grid item  md={4}>
 						<TextField 
 							id="microbitDataField" 
-							label="Microbit Data Field" 
+							label="Property" 
 							variant="filled" 
-							// value= {textInput}
-				      onChange= {handleTextInputChange}
+							// value= {pageField}
+				      onChange= {pageFieldChange}
 						/>
 						</Grid>
 						<Grid item md={4}>
 							<TextField 
 								id="manualDataValue" 
-								label="Manual Data Value" 
+								label="Value" 
 								variant="filled" 
-								// value= {textInput}
+								value= {dataField}
 					      onChange= {handleValueChange}
 							/>
 
