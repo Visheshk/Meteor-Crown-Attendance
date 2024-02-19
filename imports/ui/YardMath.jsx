@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState, useRef, Fragment } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 
-import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import microbit from 'microbit-web-bluetooth'
 import TextField from '@mui/material/TextField';
 
@@ -12,15 +11,13 @@ import { DeviceCollection } from '/imports/db/TasksCollection';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 
+import { Room } from './Room';
 import { ScannerComp } from './ScannerComp';
 import { VisitorLogs } from './VisitorLogs';
 
 
-
 /*
 
-step 1: add scanner component
-step 2: if user Id is established: enable claim button
 
 claim logic - tag corresponding dev logs as "claimed"
 	
@@ -29,17 +26,28 @@ add to scoreboard, score
 
 //make duplicable page 5-10-10-5
 
+
+//add scoreboard
+
 */
 
 
 export const YardMath = () => {
 
 	const [speedRows, setSpeedRows] = useState([]);
-	const [userId, setUserId] = useState('');
 	const [userInfo, setUserInfo] = useState({});
-
 	const stateRef = useRef();
-	stateRef.user = userInfo;
+
+	stateRef.current= [0, 0];
+	stateRef.current[1] = userInfo;
+
+	const childUserIdUpdate = ({code, data}) => {
+		setUserInfo(data);
+		console.log(data);
+		console.log(userInfo);
+		console.log(stateRef);
+		// console.log(userId, userInfo);
+	}
 
 	const columns = [
 		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
@@ -59,7 +67,30 @@ export const YardMath = () => {
 	const claimEntry = function (row) {
 	 	console.log(row);
 	 	console.log(stateRef.current);
+	 	let thisid = row.id
+	 	startId = thisid.slice((thisid.indexOf("start:") + 6), thisid.indexOf("::"));
+	 	stopId = thisid.slice((thisid.indexOf("stop:") + 5), );
+
+	 	dd = new Date();
+		log = { 
+			"activity": "40 yard dash", 
+			"eventId": "abcd", 		//// TODO: make eventID dynamic here!!
+			"score": row.speed, 
+			"logInfo": {row},
+			"epochTime": dd.getTime(), 
+			"userBarcode": userInfo.barcodeId,
+			"userInfo": userInfo,
+			"timestamp": dd.toISOString()
+		 };
+		console.log(userInfo);
+		Meteor.call('score.addLog', log);
+		console.log(startId, stopId)
+		Meteor.call('devlogs.claim', [startId, stopId], userInfo)
 	 	// console.log(stateRef.current[parseInt(row["id"])])
+	 }
+
+	 const clearLogs = function () {
+	 	Meteor.call('devlogs.clearByTime', ["start", "stop"]);
 	 }
 
     const setupStartStopTable = function (logs) {
@@ -89,8 +120,10 @@ export const YardMath = () => {
     					stop: logs[r]["timestamp"].slice(11,23),
     					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
     					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
+    					disabled: (Object.keys(stateRef.current[1]).length == 0)
     				};
-    				// console.log(tr);
+    				console.log(tr);
+    				console.log(stateRef);
     				rows.push(tr);
     				startRow = {};
     				lastStartIndex = -1;
@@ -100,24 +133,6 @@ export const YardMath = () => {
     	if (Object.keys(startRow).length > 0) {
     		rows.push(startRow);
     	}
-
-    	// for (s in starts) {
-    	// 	// console.log(starts)
-    	// 	let stopTime = [""];
-    	// 	let gap = 10000;
-    	// 	if (stops.length > s) {
-    	// 		stopTime = [stops[s]["epochTime"], stops[s]["timestamp"]];
-    	// 		gap = stopTime[0] - starts[s]["epochTime"];
-    	// 	}
-    	// 	rows.push({
-    	// 		start: starts[s]["timestamp"].slice(11,23),
-    	// 		stop: stopTime[0],
-    	// 		speed: gap,
-    	// 		id: s
-    	// 	})
-    	// }
-    	// setSpeedRows(rows);
-    	// con
     	return rows;
     }
 
@@ -135,12 +150,7 @@ export const YardMath = () => {
     	// stateRef.rows = rows;
     	return { devLogs, rows };
     });
-    stateRef.current = devLogs;
-
-
-    
-
-
+    stateRef.current[0] = devLogs;
 
 
     // if (!handler.ready()) {
@@ -165,10 +175,10 @@ export const YardMath = () => {
 		  ): 
 		<> </>}
 		<Box>
-			<Button variant="contained"> Clear </Button>
+			<Button variant="contained" onClick={clearLogs} > Clear </Button>
 		</Box>
 		<Box>
-			<ScannerComp />
+			<ScannerComp spotUser = {childUserIdUpdate} />
 		</Box>
     </Box>
 

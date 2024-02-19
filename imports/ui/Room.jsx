@@ -11,7 +11,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 
 import { ScoreCollection } from '/imports/db/TasksCollection';
 
-export const Room = () => {
+export const Room = ({spotUser}) => {
 	const [pageActivity, setPageActivity] = useState(Session.get("activity"));
 	const [eventId, setEventId] = useState(Session.get("eventId"));
 	const [activityScore, setActivityScore] = useState('');
