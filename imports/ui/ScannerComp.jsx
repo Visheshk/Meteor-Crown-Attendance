@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 
 export const ScannerComp = ({spotUser}) => {
 	const [camData, setCamData] = useState(0);
@@ -54,7 +57,13 @@ export const ScannerComp = ({spotUser}) => {
         />
       </Grid>
       <Grid container item md={3}>
-        <h3>{JSON.stringify(codeVisitor)} </h3>
+        <Box>
+          <Typography variant="caption" display="block" gutterBottom>
+            {/*{JSON.stringify(codeVisitor)}*/}
+            Name: {codeVisitor.name}   barcode: {codeVisitor.barcodeId}
+          </Typography>
+        </Box>
+        
         
       </Grid>
       <Grid container item md={2}>
