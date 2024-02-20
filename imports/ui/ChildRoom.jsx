@@ -11,7 +11,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 
 import { ScoreCollection } from '/imports/db/TasksCollection';
 
-export const Room = ({spotUser, eventSetter, parentActivity}) => {
+export const ChildRoom = ({spotUser, eventSetter, parentActivity}) => {
 	const [pageActivity, setPageActivity] = useState("");
 	const [eventId, setEventId] = useState("");
 	const [activityScore, setActivityScore] = useState('');
@@ -27,33 +27,21 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 	let pageFeatures = "";
 	let pageTitle = "none";
 
-	// console.log(Session.get('activity'), Session.get('eventId'))
 	if (Session.get('activity') && Session.get('eventId') && Session.get('activity') != '' && Session.get('eventId') != '' ) {
-		// console.log(Session.get('activity'), Session.get('eventId'))
-		// setPageActivity(Session.get('pageActivity'));
-		// setEventId(Session.get('eventId'));
-		// setPageFeatures(true);
 		pageFeatures = "none";
 		pageTitle = "";
-		//
 	}
 	else {
 		pageFeatures = "";
 		pageTitle = "none";
 	}
-	
+
 	if (parentActivity) {
 		// setPageActivity(parentActivity);
 	}
-	// console.log(pageFeatures);	
-	//add a table inside scanner comp that also retrieves event specific logs
 
-	// const { scores } = useTracker(() => {
   	const handler = Meteor.subscribe('scorelogs');	
   	const scores = ScoreCollection.find({}).fetch();
-  // 	console.log(scores);
-  // 	return { scores };
-  // });
 
 	const postLog = function () {
 		// console.log(featureVal);
@@ -113,7 +101,7 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 
   const lockEvent = (event) => {
   	Session.set('eventId', eventId);
-  	Session.set('activity', pageActivity);
+  	Session.set('activity', parentActivity);
   	eventSetter(eventId);
   	setRenderReq(renderReq + 1);
   	// setEventId(eventId + "");
@@ -128,8 +116,8 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 		
 	}
 	const userScores = useMemo( () => {	
-			uss = scores.filter(x => {return  x.eventId == eventId && x.activity == pageActivity});
-			// console.log(scores, uss, eventId);
+			uss = scores.filter(x => {return  x.eventId == eventId && x.activity == parentActivity});
+			console.log(scores, uss, eventId, parentActivity);
 			// setRenderReq(renderReq + 1);
 			return  uss;
 		}, [pageActivity, eventId, scores] )
@@ -156,8 +144,10 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 	return (
 		<Grid container item direction="column" spacing={2}  >
 				<Grid container item direction="row" sx={{display: pageFeatures}}>				
-					<Grid container item md={4} >
-						<TextField id="	" label="Activity" variant="standard" onChange={event => setPageActivity(event.target.value)} />
+					<Grid container item md={6} >
+						<Typography variant="h5" component="h3">
+							  {parentActivity}
+						</Typography>
 					</Grid>
 					<Grid container item md={3}>
 						<TextField id="eventID" label="Event ID" variant="standard" onChange={event => setEventId(event.target.value)}/>
@@ -167,10 +157,10 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 					</Grid>
 				</Grid>
 
-				<Grid container item direction="row" sx={{display: pageTitle}}>				
+				<Grid container item direction="row" sx={{display: pageTitle}} alignItems="center">
 					<Grid container item md={8} zeroMinWidth>
 						<Typography variant="h3" component="h3">
-							  {pageActivity}
+							  {parentActivity}
 						</Typography>
 					</Grid>
 					<Grid container item md={3}>
@@ -205,7 +195,6 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 				<Grid container item md={1} sx={{display: "none"}}>
 				{renderReq}
 				</Grid>
-				
 			</Grid>
 
 			<Snackbar
@@ -219,4 +208,4 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 	)
 }
 
-export default Room
+export default ChildRoom
