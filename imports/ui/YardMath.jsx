@@ -11,7 +11,7 @@ import { DeviceCollection } from '/imports/db/TasksCollection';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 
-import { Room } from './Room';
+import { ChildRoom } from './ChildRoom';
 import { ScannerComp } from './ScannerComp';
 import { VisitorLogs } from './VisitorLogs';
 
@@ -36,16 +36,18 @@ export const YardMath = () => {
 
 	const [speedRows, setSpeedRows] = useState([]);
 	const [userInfo, setUserInfo] = useState({});
+	const [eventId, setEventId] = useState("");
 	const stateRef = useRef();
 
-	stateRef.current= [0, 0];
+	stateRef.current= [0, 0, 0];
 	stateRef.current[1] = userInfo;
+	stateRef.current[2] = eventId;
 
-	const childUserIdUpdate = ({code, data}) => {
+	const childUserIdUpdate = ({data}) => {
 		setUserInfo(data);
-		console.log(data);
-		console.log(userInfo);
-		console.log(stateRef);
+		// console.log(data);
+		// console.log(userInfo);
+		// console.log(stateRef);
 		// console.log(userId, userInfo);
 	}
 
@@ -70,11 +72,12 @@ export const YardMath = () => {
 	 	let thisid = row.id
 	 	startId = thisid.slice((thisid.indexOf("start:") + 6), thisid.indexOf("::"));
 	 	stopId = thisid.slice((thisid.indexOf("stop:") + 5), );
+	 	//// TODO: add error checker and  toast notification
 
 	 	dd = new Date();
 		log = { 
 			"activity": "40 yard dash", 
-			"eventId": "abcd", 		//// TODO: make eventID dynamic here!!
+			"eventId": stateRef.current[2],
 			"score": row.speed, 
 			"logInfo": {row},
 			"epochTime": dd.getTime(), 
@@ -91,6 +94,10 @@ export const YardMath = () => {
 
 	 const clearLogs = function () {
 	 	Meteor.call('devlogs.clearByTime', ["start", "stop"]);
+	 }
+
+	 const infoTester = function () {
+	 	console.log(eventId);
 	 }
 
     const setupStartStopTable = function (logs) {
@@ -120,7 +127,7 @@ export const YardMath = () => {
     					stop: logs[r]["timestamp"].slice(11,23),
     					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
     					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
-    					disabled: (Object.keys(stateRef.current[1]).length == 0)
+    					disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
     				};
     				console.log(tr);
     				console.log(stateRef);
@@ -176,9 +183,10 @@ export const YardMath = () => {
 		<> </>}
 		<Box>
 			<Button variant="contained" onClick={clearLogs} > Clear </Button>
+			<Button variant="outline" onClick={infoTester} > Tester </Button>
 		</Box>
 		<Box>
-			<ScannerComp spotUser = {childUserIdUpdate} />
+			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="40 yard dash"/>
 		</Box>
     </Box>
 
