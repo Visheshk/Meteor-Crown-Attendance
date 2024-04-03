@@ -13,9 +13,9 @@ export const TaskForm = () => {
   return (
     <form className="task-form" onSubmit={handleSubmit}>
       <p className='form-field-title'>Name: <input type="text" name="name" placeholder="name" required /> </p>
-      <p className='form-field-title'>Age: <input type="number" name="age" placeholder="age" required /></p>
-      <p className='form-field-title'>Gender: <input type="text" name="gender" placeholder="gender" required /></p>
-      <p className='form-field-title'>Date of Birth: <input type="date" name="dob" required /></p>
+      <p className='form-field-title'>Age: <input type="number" name="age" placeholder="age"  /></p>
+      <p className='form-field-title'>Gender: <input type="text" name="gender" placeholder="gender"  /></p>
+      <p className='form-field-title'>Date of Birth: <input type="date" name="dob"  /></p>
       <button type="submit">Add Visitor</button>
     </form>
 
