@@ -64,15 +64,15 @@ export const ChildRoom = ({spotUser, eventSetter, parentActivity}) => {
 			setToastOpen(true);
 		}
 		else {
-			dd = new Date();
+			// dd = new Date();
 			log = { 
 				"activity": pageActivity, 
 				"eventId": eventId,
 				"score": activityScore, 
-				"epochTime": dd.getTime(), 
+				// "epochTime": dd.getTime(), 
 				"userBarcode": userId,
 				"userInfo": userInfo,
-				"timestamp": dd.toISOString()
+				// "timestamp": dd.toISOString()
 			 };
 			Meteor.call('score.addLog', log)
 			let uid = userId
