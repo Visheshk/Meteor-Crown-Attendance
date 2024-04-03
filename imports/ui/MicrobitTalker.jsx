@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
@@ -27,9 +28,38 @@ export const MicrobitTalker = ({act}) => {
 		activity = act;	
 	}
 
+	let wakeLock;
+
+	const requestWakeLock = async () => {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.onrelease = function(ev) { console.log(ev); }
+      wakeLock.addEventListener('release', () => {});
+
+    } catch (err) {  console.log(err); }
+  } // requestWakeLock()
+	
+	const handleVisibilityChange = () => {
+    if (document.visibilityState === 'visible') {
+      requestWakeLock();
+    }
+  }
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+
+  console.log(navigator.wakeLock);
+
+	let microbitLogs = {
+		"40ydstart": {"pageField": "40start", "activity": "40 yard dash"},
+
+	}
+
+
 	const uartMessage = function (event) {
 		console.log(JSON.stringify(event.detail, null, 2));
 		setDataField(event.detail);
+
 		if (event.detail == "40ydstart") {
 			setPageField("40start");
 			activity = "40 yard dash";
@@ -87,12 +117,10 @@ export const MicrobitTalker = ({act}) => {
     const postData = event => {
     	console.log(dataField, pageField);
     	
-    	let dd = new Date();
-    	if (stateRef.current != "") {
-    		console.log(activity);
+    	
+    	if (stateRef.current != "" && logging == true) {
+    		// console.log(activity);
 	    	let newLog = {
-					"epochTime": dd.getTime(),
-					"timestamp": dd.toISOString(),
 					"microbitMessage": dataField,
 					"pageField": stateRef.current,
 					"activity": activity ///***TODO: make this dyanimc/inherited from yard math
@@ -103,6 +131,13 @@ export const MicrobitTalker = ({act}) => {
 				console.log("no property");
 			}
     };
+
+    const toggleLogging = (event) => {
+    	// console.log(event.target.checked);
+	    setLogging(event.target.checked);
+	  };
+
+     
 
 	async function connectBit() {
 		const device = await microbit.requestMicrobit(window.navigator.bluetooth);
@@ -140,7 +175,7 @@ export const MicrobitTalker = ({act}) => {
 						<Button variant="outlined" onClick={connectBit}> Connect </Button>
 					</Grid>
 					
-					<Grid item  md={4}>
+					<Grid item  md={3}>
 						<TextField 
 							id="microbitDataField" 
 							label="Property" 
@@ -149,7 +184,7 @@ export const MicrobitTalker = ({act}) => {
 				      onChange= {pageFieldChange}
 						/>
 					</Grid>
-					<Grid item md={4}>
+					<Grid item md={3}>
 						<TextField 
 							id="manualDataValue" 
 							label="Value" 
@@ -160,16 +195,18 @@ export const MicrobitTalker = ({act}) => {
 
 					</Grid>
 					<Grid item md={1}>
-							
 						<Button variant="outlined" onClick={postData}> Post Data</Button>
 					</Grid>
 					<Grid item md={1}>
-						<FormControlLabel control={<Switch checked={logging} onChange={toggleLogging} />} label="Label" />
+						<Switch checked={logging} onChange={toggleLogging} /> <Typography variant="body1" component="h3">
+							  Toggle logging
+						</Typography>
 					</Grid>
+					
 
 	    </Grid>
 	    <Grid container item direction="row" spacing={4} alignItems="center">
-	    <Grid item md={1}>
+			    <Grid item md={1}>
 					</Grid>
 			    {/*<YardMath />*/}
 		   </Grid>
