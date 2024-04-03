@@ -84,8 +84,8 @@ export const MicrobitTalker = ({act}) => {
 			setPageField("dashstart");
 			activity = "Dash";
 		}
-		else if (event.detail == "agilitystart") {
-			setPageField("agilitystart");
+		else if (event.detail == "agilitycross") {
+			setPageField("agilitycross");
 			activity = "Agility";
 		}
 		

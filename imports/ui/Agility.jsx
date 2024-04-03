@@ -18,6 +18,7 @@ import { MicrobitTalker } from './MicrobitTalker';
 
 export const Agility = () => {
 
+	const activityName = "Agility";
 	const [speedRows, setSpeedRows] = useState([]);
 	const [userInfo, setUserInfo] = useState({});
 	const [eventId, setEventId] = useState("");
@@ -34,8 +35,8 @@ export const Agility = () => {
 	const columns = [
 		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
 		{ field: 'end', headerName: 'End',  width: 150 },
-		{ field: 'speed', headerName: 'Speed (seconds)', width: 150 },
-		{ field: 'stops', headerName: 'Posts',  width: 150 },
+		{ field: 'count', headerName: 'Count', width: 150 },
+		// { field: 'stops', headerName: 'Posts',  width: 150 },
 		// { field: 'stop 2', headerName: '10 yards',  width: 150 },
 		{ field: 'buttons', headerName: '', width: 150,
 			sortable: false,
@@ -58,11 +59,10 @@ export const Agility = () => {
 
 	 	dd = new Date();
 		log = { 
-			"activity": "sprints", 
+			"activity": activityName, 
 			"eventId": stateRef.current[2],
-			"score": row.speed, 
-			"stopsTimes": row.stops,
-			"stopRows": row.stopIds, 
+			"score": row.count, 
+			"crossIds": row.crossIds,
 			"logInfo": {row},
 			"epochTime": dd.getTime(), 
 			"userBarcode": userInfo.barcodeId,
@@ -72,12 +72,12 @@ export const Agility = () => {
 		console.log(userInfo);
 		Meteor.call('score.addLog', log);
 		console.log(startId, stopId)
-		Meteor.call('devlogs.claim', [startId, stopId], userInfo)
+		Meteor.call('devlogs.claim', row.crossIds, userInfo)
 	 	// console.log(stateRef.current[parseInt(row["id"])])
 	 }
 
 	 const clearLogs = function () {
-	 	Meteor.call('devlogs.clearByTime', ["5start", "5post1", "5post2"]);
+	 	Meteor.call('devlogs.clearByTime', ["agilitycross"]);
 	 }
 
 	 const infoTester = function () {
@@ -88,72 +88,62 @@ export const Agility = () => {
     	let startVal = 0;
     	let stopVal = 0;
     	let rowNumber = 0;
-    	// let starts = logs.filter(x => {return x.pageField=="5start"});
-    	let posts = logs.filter(x => {return (x.pageField).indexOf("5post") != -1});
-    	console.log(posts)
-    	// let stops = logs.filter(x => {return x.pageField=="5stop"});
     	let rows = [];
     	let lastStartIndex = -1;
+    	let count = 0;
     	let startRow = {};
     	for (let r in logs) {
-    		if (logs[r].pageField == "5start") {
+    		if (logs[r].pageField == "agilitycross") {
     			if (lastStartIndex == -1) {
 	    			lastStartIndex = r;
 	    			startRow = {
 	    				start: logs[r]["timestamp"].slice(11,23),
 	    				end: "",
-	    				stops: "",
-	    				stopIds: [],
-	    				speed: "",
+	    				count: 0,
+	    				crossIds: [logs[r]["_id"]],
 	    				id: "soloStart:" + logs[r]["_id"],
+	    				epochTime: logs[r]["epochTime"],
 	    				disabled: true
 	    			}
 	    		}
 	    		else {
-	    			tr = {
-    					start: logs[lastStartIndex]["timestamp"].slice(11,23),
-    					end: logs[r]["timestamp"].slice(11,23),
-    					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
-    					stops: startRow.stops,
-    					stopIds: startRow.stopIds,
-    					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
-    					disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
-    				};
-    				// console.log(tr);
-    				// console.log(stateRef);
-    				rows.push(tr);
-    				startRow = {};
-    				lastStartIndex = -1;
+	    			if ((logs[r]["epochTime"] - startRow["epochTime"]) < 60000){
+	    				count += 1;
+	    				startRow["count"] = count
+	    				startRow.crossIds.push(logs[r]["_id"]);
+	    				startRow.end = logs[r]["timestamp"].slice(11,23);
+	    			}
+	    			else {
+	    				tr = {
+	    					start: startRow.start,
+		    				end: startRow.end,
+		    				count: count,
+		    				crossIds: startRow.crossIds,
+		    				id: "soloEnd:" + logs[r]["_id"],
+		    				epochTime: logs[r]["epochTime"],
+		    				disabled: Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == ""
+	    				}
+	    				// lastStartIndex = -1;
+	    				count = 0;
+	    				rows.push(tr);
+	    				// startRow = {};
+	    				startRow = {
+		    				start: logs[r]["timestamp"].slice(11,23),
+		    				end: "",
+		    				count: 0,
+		    				crossIds: [logs[r]["_id"]],
+		    				id: "soloStart:" + logs[r]["_id"],
+		    				epochTime: logs[r]["epochTime"],
+		    				disabled: true
+		    			}
+	    			}
 	    		}
     		}
-    		else if ((logs[r].pageField).indexOf("5post") != -1) {
-    			{
-    				if (lastStartIndex != -1) {
-    					console.log("adding post");
-    					thisTime = Math.round((logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000);
-    					startRow.stops += (logs[r].pageField).charAt(5) + ": " + String(thisTime) + " ";
-    					startRow.stopIds.push(logs[r]["_id"]);
-    				}
-    			}
-    		}
-    		else if (logs[r].pageField == "5stop") {
-    			if (lastStartIndex > -1) {
-    				tr = {
-    					start: logs[lastStartIndex]["timestamp"].slice(11,23),
-    					end: logs[r]["timestamp"].slice(11,23),
-    					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
-    					stops: startRow.stops,
-    					stopIds: startRow.stopIds,
-    					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
-    					disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
-    				};
-    				console.log(tr);
-    				console.log(stateRef);
-    				rows.push(tr);
-    				startRow = {};
-    				lastStartIndex = -1;
-    			}
-    		}
+			// console.log(startRow);
+			console.log(stateRef);
+			
+			// startRow = {};
+			// lastStartIndex = -1;
     	}
     	if (Object.keys(startRow).length > 0) {
     		rows.push(startRow);
@@ -165,7 +155,7 @@ export const Agility = () => {
     const { devLogs, rows } = useTracker(() => {
     	const handler = Meteor.subscribe('devicelogs');	
     	const devLogs = DeviceCollection.find({$and: [
-	    	{activity: "sprints"},
+	    	{activity: activityName},
     		{claimed: {$ne: true} },
     		{cleared: {$ne: true} },
     		// {}
@@ -186,7 +176,7 @@ export const Agility = () => {
 	return (
 		// <Grid container spacing={4} alignItems="center"  justifyContent="space-between">
 	<Box>
-		<MicrobitTalker act="sprints"/>
+		<MicrobitTalker act={activityName}/>
 		{ rows ? (
 			<Box>	
 				<DataGrid
@@ -204,7 +194,7 @@ export const Agility = () => {
 			<Button variant="outline" onClick={infoTester} > Tester </Button>
 		</Box>
 		<Box>
-			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="sprints"/>
+			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity={activityName}/>
 		</Box>
     </Box>
 
