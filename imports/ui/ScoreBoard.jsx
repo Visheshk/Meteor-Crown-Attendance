@@ -38,11 +38,12 @@ export const ScoreBoard = () => {
 	});
 
 	const columns = [
+		
+		{ field: 'event', headerName: 'Event ID', width: 75 },
 		{ field: 'sport', headerName: 'Sport', width: 75 },
 		{ field: 'name', headerName: 'Name/ID', type: 'number', width: 110 },
 		{ field: 'score', headerName: 'Score', width: 65 },
-		{ field: 'event', headerName: 'Event ID', width: 65 },
-		{ field: 'timestamp', headerName: 'Timestamp', width: 190 }
+		{ field: 'timestamp', headerName: 'Timestamp', width: 170 }
 
 	];
 	
@@ -57,13 +58,13 @@ export const ScoreBoard = () => {
 	
 
 	return (
-		<div style={{ height: 700, width: '100%' }}>
+		<div style={{ width: 900 }}>
 		  <DataGrid
 			rows={rows}
 			columns={columns}
 			pageSize={5}
 			// loading={isLoading}
-			rowHeight={180}
+			// rowHeight={180}
 		  />
 		</div>
 	  );

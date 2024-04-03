@@ -20,7 +20,7 @@ const addVisit = ({visitor, room}) => {
 }
 
 const makeNewBarcode = ({visitor}) => {
-  Meteor.call('visitors.barUpdate', visitor);
+  // Meteor.call('visitors.barUpdate', visitor);
 }
 
 export const App = () => {

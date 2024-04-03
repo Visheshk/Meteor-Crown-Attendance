@@ -63,7 +63,7 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
         p: 2, // Padding inside the box, adjust as needed
         gap: 2, // Space between children
       }}>
-        <Button variant="outline"  sx={{ color: 'white', backgroundColor: 'gray', '&:hover': { backgroundColor: 'darkgray' } }} onClick={() => /*editVisitor({"visitor": visitor._id})*/null}>Edit </Button>
+        <Button variant="outline" onClick={() => /*editVisitor({"visitor": visitor._id})*/null}>Edit </Button>
         <Button variant="outline" onClick={() => makeNewBarcode({"visitor": visitor._id})}>Make new barcode</Button>
         <Button variant="outline" onClick={() => onAddVisit({"visitor": visitor._id, "room": "test"})}>Add visit</Button>
 
