@@ -59,11 +59,10 @@ export const Count = () => {
 
 	 	dd = new Date();
 		log = { 
-			"activity": "Count", 
+			"activity": activityName, 
 			"eventId": stateRef.current[2],
-			"score": row.speed, 
-			"stopsTimes": row.stops,
-			"stopRows": row.stopIds, 
+			"score": row.count, 
+			"crossIds": row.crossIds,
 			"logInfo": {row},
 			"epochTime": dd.getTime(), 
 			"userBarcode": userInfo.barcodeId,
@@ -73,7 +72,7 @@ export const Count = () => {
 		console.log(userInfo);
 		Meteor.call('score.addLog', log);
 		console.log(startId, stopId)
-		Meteor.call('devlogs.claim', [startId, stopId], userInfo)
+		Meteor.call('devlogs.claim', row.crossIds, userInfo)
 	 	// console.log(stateRef.current[parseInt(row["id"])])
 	 }
 
@@ -105,7 +104,7 @@ export const Count = () => {
 	    				start: logs[r]["timestamp"].slice(11,23),
 	    				end: "",
 	    				count: 0,
-	    				crossIds: [],
+	    				crossIds: [logs[r]["_id"]],
 	    				id: "soloStart:" + logs[r]["_id"],
 	    				epochTime: logs[r]["epochTime"],
 	    				disabled: true
@@ -128,7 +127,7 @@ export const Count = () => {
 		    				epochTime: logs[r]["epochTime"],
 		    				disabled: Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == ""
 	    				}
-	    				// lastStartIndex = -1;
+	    				lastStartIndex = -1;
 	    				count = 0;
 	    				rows.push(tr);
 	    				// startRow = {};
@@ -136,7 +135,7 @@ export const Count = () => {
 		    				start: logs[r]["timestamp"].slice(11,23),
 		    				end: "",
 		    				count: 0,
-		    				crossIds: [],
+		    				crossIds: [logs[r]["_id"]],
 		    				id: "soloStart:" + logs[r]["_id"],
 		    				epochTime: logs[r]["epochTime"],
 		    				disabled: true
@@ -160,7 +159,7 @@ export const Count = () => {
     const { devLogs, rows } = useTracker(() => {
     	const handler = Meteor.subscribe('devicelogs');	
     	const devLogs = DeviceCollection.find({$and: [
-	    	{activity: "Count"},
+	    	{activity: activityName},
     		{claimed: {$ne: true} },
     		{cleared: {$ne: true} },
     		// {}
@@ -181,7 +180,7 @@ export const Count = () => {
 	return (
 		// <Grid container spacing={4} alignItems="center"  justifyContent="space-between">
 	<Box>
-		<MicrobitTalker act="Count"/>
+		<MicrobitTalker act={activityName}/>
 		{ rows ? (
 			<Box>	
 				<DataGrid
@@ -199,7 +198,7 @@ export const Count = () => {
 			<Button variant="outline" onClick={infoTester} > Tester </Button>
 		</Box>
 		<Box>
-			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="Count"/>
+			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity={activityName}/>
 		</Box>
     </Box>
 
