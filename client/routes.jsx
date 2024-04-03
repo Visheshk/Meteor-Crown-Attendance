@@ -12,6 +12,10 @@ import MicrobitTalker from '../imports/ui/MicrobitTalker'
 import YardMath from '../imports/ui/YardMath'
 import FiveTen from '../imports/ui/FiveTen'
 
+import Dash from '../imports/ui/Dash'
+import Agility from '../imports/ui/Agility'
+import Count from '../imports/ui/Count'
+
 FlowRouter.route("/", {
 	name: 'index',
 	action () {
@@ -41,6 +45,40 @@ FlowRouter.route("/microbit", {
 	    // console.log("route>?");
 	}
 })
+
+FlowRouter.route("/dash", {
+	name: 'dash',
+	action () {
+	    mount( AppRoute, {
+	      content: <Dash />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+FlowRouter.route("/agility", {
+	name: 'agility',
+	action () {
+	    mount( AppRoute, {
+	      content: <Agility />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+
+FlowRouter.route("/count", {
+	name: 'count',
+	action () {
+	    mount( AppRoute, {
+	      content: <Count />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+
+
 
 FlowRouter.route("/40yard", {
 	name: '40yard',
@@ -77,17 +115,6 @@ FlowRouter.route("/dribblesprint", {
 	action () {
 	    mount( AppRoute, {
 	      content: <FiveTen />
-	    })
-	    // console.log("route>?");
-	}
-})
-
-
-FlowRouter.route("/passcount", {
-	name: 'pass',
-	action () {
-	    mount( AppRoute, {
-	      content: <PassCount />
 	    })
 	    // console.log("route>?");
 	}

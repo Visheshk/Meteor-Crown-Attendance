@@ -21,9 +21,9 @@ export const MicrobitTalker = ({act}) => {
 
 	const stateRef = useRef();
 	stateRef.current=pageField;
-	// console.log(act);
+	console.log(act);
 
-	let activity = "40 yard dash";
+	let activity = "Dash";
 	if (act) {
 		activity = act;	
 	}
@@ -33,7 +33,9 @@ export const MicrobitTalker = ({act}) => {
 	const requestWakeLock = async () => {
     try {
       wakeLock = await navigator.wakeLock.request('screen');
-      wakeLock.onrelease = function(ev) { console.log(ev); }
+      wakeLock.onrelease = function(ev) { 
+      	// console.log(ev); 
+      }
       wakeLock.addEventListener('release', () => {});
 
     } catch (err) {  console.log(err); }
@@ -52,6 +54,10 @@ export const MicrobitTalker = ({act}) => {
 
 	let microbitLogs = {
 		"40ydstart": {"pageField": "40start", "activity": "40 yard dash"},
+		"40ydstop": {"pageField": "40stop", "activity": "40 yard dash"},
+		"5start": {"pageField": "5start", "activity": "5105 sprint"},
+		"5post1": {"pageField": "5post1", "activity": "5105 sprint"},
+		"5post2": {"pageField": "5post2", "activity": "5105 sprint"},
 
 	}
 
@@ -68,17 +74,38 @@ export const MicrobitTalker = ({act}) => {
 			setPageField("40stop");
 			activity = "40 yard dash";
 		}
+		
+
+		else if (event.detail == "dashstop") {
+			setPageField("dashstop");
+			activity = "Dash";
+		}
+		else if (event.detail == "dashstart") {
+			setPageField("dashstart");
+			activity = "Dash";
+		}
+		else if (event.detail == "agilitystart") {
+			setPageField("agilitystart");
+			activity = "Agility";
+		}
+		
+		else if (event.detail == "countcross") {
+			setPageField("countcross");
+			activity = "Count";
+		}
+
+
 		else if (event.detail == "5start") {
 			setPageField("5start");
-			// activity = "5105 sprint";
+			activity = "5105 sprint";
 		}
 		else if (event.detail == "5post1") {
 			setPageField("5post1");
-			// activity = "5105 sprint";
+			activity = "5105 sprint";
 		}
 		else if (event.detail == "5post2") {
 			setPageField("5post2");
-			// activity = "5105 sprint";
+			activity = "5105 sprint";
 		}
 		postData();
 	}
@@ -116,7 +143,7 @@ export const MicrobitTalker = ({act}) => {
 
     const postData = event => {
     	console.log(dataField, pageField);
-    	
+    	console.log(activity);
     	
     	if (stateRef.current != "" && logging == true) {
     		// console.log(activity);
