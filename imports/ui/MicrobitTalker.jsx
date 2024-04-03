@@ -6,19 +6,50 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import {YardMath} from './YardMath';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
-export const MicrobitTalker = () => {
+// import {YardMath} from './YardMath';
+
+export const MicrobitTalker = ({act}) => {
 	const [bitDevice, setBitDevice] = useState({});
 	const [mbData, setMbData] = useState([]);
 	const [dataField, setDataField] = useState('');
 	const [pageField, setPageField] = useState('');
+	const [logging, setLogging] = React.useState(false);
+
 	const stateRef = useRef();
 	stateRef.current=pageField;
+	// console.log(act);
+
+	let activity = "40 yard dash";
+	if (act) {
+		activity = act;	
+	}
 
 	const uartMessage = function (event) {
 		console.log(JSON.stringify(event.detail, null, 2));
 		setDataField(event.detail);
+		if (event.detail == "40ydstart") {
+			setPageField("40start");
+			activity = "40 yard dash";
+		}
+		else if (event.detail == "40ydstop") {
+			setPageField("40stop");
+			activity = "40 yard dash";
+		}
+		else if (event.detail == "5start") {
+			setPageField("5start");
+			// activity = "5105 sprint";
+		}
+		else if (event.detail == "5post1") {
+			setPageField("5post1");
+			// activity = "5105 sprint";
+		}
+		else if (event.detail == "5post2") {
+			setPageField("5post2");
+			// activity = "5105 sprint";
+		}
 		postData();
 	}
 
@@ -57,16 +88,21 @@ export const MicrobitTalker = () => {
     	console.log(dataField, pageField);
     	
     	let dd = new Date();
-    	let newLog = {
-				"epochTime": dd.getTime(),
-				"timestamp": dd.toISOString(),
-				"microbitMessage": dataField,
-				"pageField": stateRef.current
+    	if (stateRef.current != "") {
+    		console.log(activity);
+	    	let newLog = {
+					"epochTime": dd.getTime(),
+					"timestamp": dd.toISOString(),
+					"microbitMessage": dataField,
+					"pageField": stateRef.current,
+					"activity": activity ///***TODO: make this dyanimc/inherited from yard math
+				}
+				Meteor.call('device.addLog', newLog);
 			}
-
-			Meteor.call('device.addLog', newLog);
+			else {
+				console.log("no property");
+			}
     };
-
 
 	async function connectBit() {
 		const device = await microbit.requestMicrobit(window.navigator.bluetooth);
@@ -112,29 +148,30 @@ export const MicrobitTalker = () => {
 							// value= {pageField}
 				      onChange= {pageFieldChange}
 						/>
-						</Grid>
-						<Grid item md={4}>
-							<TextField 
-								id="manualDataValue" 
-								label="Value" 
-								variant="filled" 
-								value= {dataField}
-					      onChange= {handleValueChange}
-							/>
+					</Grid>
+					<Grid item md={4}>
+						<TextField 
+							id="manualDataValue" 
+							label="Value" 
+							variant="filled" 
+							value= {dataField}
+				      onChange= {handleValueChange}
+						/>
 
-						</Grid>
-						<Grid item md={1}>
+					</Grid>
+					<Grid item md={1}>
 							
-							<Button variant="outlined" onClick={postData}> Post Data</Button>
-						</Grid>
-						<Grid item >
-						</Grid>
+						<Button variant="outlined" onClick={postData}> Post Data</Button>
+					</Grid>
+					<Grid item md={1}>
+						<FormControlLabel control={<Switch checked={logging} onChange={toggleLogging} />} label="Label" />
+					</Grid>
 
 	    </Grid>
 	    <Grid container item direction="row" spacing={4} alignItems="center">
 	    <Grid item md={1}>
 					</Grid>
-			    <YardMath />
+			    {/*<YardMath />*/}
 		   </Grid>
 	   </Grid>
 	)

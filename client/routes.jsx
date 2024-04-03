@@ -9,6 +9,8 @@ import Room from '../imports/ui/Room'
 import LoginForm from '../imports/ui/LoginForm'
 import ScoreBoard from '../imports/ui/ScoreBoard'
 import MicrobitTalker from '../imports/ui/MicrobitTalker'
+import YardMath from '../imports/ui/YardMath'
+import FiveTen from '../imports/ui/FiveTen'
 
 FlowRouter.route("/", {
 	name: 'index',
@@ -16,7 +18,7 @@ FlowRouter.route("/", {
 	    mount( AppRoute, {
 	      content: <App />
 	    })
-	    console.log("route>?");
+	    // console.log("route>?");
 	}
 })
 
@@ -26,7 +28,7 @@ FlowRouter.route("/room", {
 	    mount( AppRoute, {
 	      content: <Room />
 	    })
-	    console.log("route>?");
+	    // console.log("route>?");
 	}
 })
 
@@ -34,11 +36,63 @@ FlowRouter.route("/microbit", {
 	name: 'micro',
 	action () {
 	    mount( AppRoute, {
-	      content: <MicrobitTalker />
+	      content: <YardMath />
 	    })
-	    console.log("route>?");
+	    // console.log("route>?");
 	}
 })
+
+FlowRouter.route("/40yard", {
+	name: '40yard',
+	action () {
+	    mount( AppRoute, {
+	      content: <YardMath />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+FlowRouter.route("/5105", {
+	name: '5sprint',
+	action () {
+	    mount( AppRoute, {
+	      content: <FiveTen />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+FlowRouter.route("/lanesprint", {
+	name: 'lanesprint',
+	action () {
+	    mount( AppRoute, {
+	      content: <FiveTen />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+FlowRouter.route("/dribblesprint", {
+	name: 'dribblesprint',
+	action () {
+	    mount( AppRoute, {
+	      content: <FiveTen />
+	    })
+	    // console.log("route>?");
+	}
+})
+
+
+FlowRouter.route("/passcount", {
+	name: 'pass',
+	action () {
+	    mount( AppRoute, {
+	      content: <PassCount />
+	    })
+	    // console.log("route>?");
+	}
+})
+
 
 FlowRouter.route("/login", {
 	name: 'login',
