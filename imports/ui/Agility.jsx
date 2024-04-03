@@ -35,7 +35,7 @@ export const Agility = () => {
 	const columns = [
 		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
 		{ field: 'end', headerName: 'End',  width: 150 },
-		{ field: 'count', headerName: 'Count', width: 150 },
+		{ field: 'speed', headerName: 'Speed (seconds)', width: 150 },
 		// { field: 'stops', headerName: 'Posts',  width: 150 },
 		// { field: 'stop 2', headerName: '10 yards',  width: 150 },
 		{ field: 'buttons', headerName: '', width: 150,
@@ -61,7 +61,7 @@ export const Agility = () => {
 		log = { 
 			"activity": activityName, 
 			"eventId": stateRef.current[2],
-			"score": row.count, 
+			"score": row.speed, 
 			"crossIds": row.crossIds,
 			"logInfo": {row},
 			"epochTime": dd.getTime(), 
@@ -90,7 +90,6 @@ export const Agility = () => {
     	let rowNumber = 0;
     	let rows = [];
     	let lastStartIndex = -1;
-    	let count = 0;
     	let startRow = {};
     	for (let r in logs) {
     		if (logs[r].pageField == "agilitycross") {
@@ -99,7 +98,7 @@ export const Agility = () => {
 	    			startRow = {
 	    				start: logs[r]["timestamp"].slice(11,23),
 	    				end: "",
-	    				count: 0,
+	    				speed: "",
 	    				crossIds: [logs[r]["_id"]],
 	    				id: "soloStart:" + logs[r]["_id"],
 	    				epochTime: logs[r]["epochTime"],
@@ -107,40 +106,21 @@ export const Agility = () => {
 	    			}
 	    		}
 	    		else {
-	    			if ((logs[r]["epochTime"] - startRow["epochTime"]) < 60000){
-	    				count += 1;
-	    				startRow["count"] = count
-	    				startRow.crossIds.push(logs[r]["_id"]);
-	    				startRow.end = logs[r]["timestamp"].slice(11,23);
-	    			}
-	    			else {
-	    				tr = {
-	    					start: startRow.start,
-		    				end: startRow.end,
-		    				count: count,
-		    				crossIds: startRow.crossIds,
-		    				id: "soloEnd:" + logs[r]["_id"],
-		    				epochTime: logs[r]["epochTime"],
-		    				disabled: Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == ""
-	    				}
-	    				// lastStartIndex = -1;
-	    				count = 0;
-	    				rows.push(tr);
-	    				// startRow = {};
-	    				startRow = {
-		    				start: logs[r]["timestamp"].slice(11,23),
-		    				end: "",
-		    				count: 0,
-		    				crossIds: [logs[r]["_id"]],
-		    				id: "soloStart:" + logs[r]["_id"],
-		    				epochTime: logs[r]["epochTime"],
-		    				disabled: true
-		    			}
-	    			}
+    				tr = {
+    					start: startRow.start,
+	    				end: logs[r]["timestamp"].slice(11,23),
+	    				crossIds: [startRow.crossIds[0], logs[r]["_id"]],
+	    				speed: (logs[r]["epochTime"] - startRow["epochTime"]) / 1000,
+	    				id: "soloEnd:" + logs[r]["_id"],
+	    				epochTime: logs[r]["epochTime"],
+	    				disabled: Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == ""
+    				}
+    				lastStartIndex = -1;
+    				rows.push(tr);
+    				startRow = {};
 	    		}
     		}
 			// console.log(startRow);
-			console.log(stateRef);
 			
 			// startRow = {};
 			// lastStartIndex = -1;
