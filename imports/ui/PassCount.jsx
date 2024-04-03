@@ -32,7 +32,7 @@ add to scoreboard, score
 */
 
 
-export const YardMath = () => {
+export const PassCount = () => {
 
 	const [speedRows, setSpeedRows] = useState([]);
 	const [userInfo, setUserInfo] = useState({});
@@ -45,16 +45,14 @@ export const YardMath = () => {
 
 	const childUserIdUpdate = ({data}) => {
 		setUserInfo(data);
-		// console.log(data);
-		// console.log(userInfo);
-		// console.log(stateRef);
-		// console.log(userId, userInfo);
 	}
 
 	const columns = [
 		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
-		{ field: 'stop', headerName: 'Stop',  width: 150 },
+		{ field: 'end', headerName: 'End',  width: 150 },
 		{ field: 'speed', headerName: 'Speed (seconds)', width: 150 },
+		{ field: 'stops', headerName: 'Posts',  width: 150 },
+		// { field: 'stop 2', headerName: '10 yards',  width: 150 },
 		{ field: 'buttons', headerName: '', width: 150,
 			sortable: false,
 		    renderCell: ({ row }) =>
@@ -76,9 +74,11 @@ export const YardMath = () => {
 
 	 	dd = new Date();
 		log = { 
-			"activity": "40 yard dash", 
+			"activity": "sprints", 
 			"eventId": stateRef.current[2],
 			"score": row.speed, 
+			"stopsTimes": row.stops,
+			"stopRows": row.stopIds, 
 			"logInfo": {row},
 			"epochTime": dd.getTime(), 
 			"userBarcode": userInfo.barcodeId,
@@ -93,7 +93,7 @@ export const YardMath = () => {
 	 }
 
 	 const clearLogs = function () {
-	 	Meteor.call('devlogs.clearByTime', ["40start", "40stop"]);
+	 	Meteor.call('devlogs.clearByTime', ["5start", "5post1", "5post2"]);
 	 }
 
 	 const infoTester = function () {
@@ -104,28 +104,62 @@ export const YardMath = () => {
     	let startVal = 0;
     	let stopVal = 0;
     	let rowNumber = 0;
-    	let starts = logs.filter(x => {return x.pageField=="40start"});
-    	let stops = logs.filter(x => {return x.pageField=="40stop"});
+    	// let starts = logs.filter(x => {return x.pageField=="5start"});
+    	let posts = logs.filter(x => {return (x.pageField).indexOf("5post") != -1});
+    	console.log(posts)
+    	// let stops = logs.filter(x => {return x.pageField=="5stop"});
     	let rows = [];
     	let lastStartIndex = -1;
     	let startRow = {};
     	for (let r in logs) {
-    		if (logs[r].pageField == "40start") {
-    			lastStartIndex = r;
-    			startRow = {
-    				start: logs[r]["timestamp"].slice(11,23),
-    				stop: "",
-    				speed: "",
-    				id: "soloStart:" + logs[r]["_id"],
-    				disabled: true
+    		if (logs[r].pageField == "5start") {
+    			if (lastStartIndex == -1) {
+	    			lastStartIndex = r;
+	    			startRow = {
+	    				start: logs[r]["timestamp"].slice(11,23),
+	    				end: "",
+	    				stops: "",
+	    				stopIds: [],
+	    				speed: "",
+	    				id: "soloStart:" + logs[r]["_id"],
+	    				disabled: true
+	    			}
+	    		}
+	    		else {
+	    			tr = {
+    					start: logs[lastStartIndex]["timestamp"].slice(11,23),
+    					end: logs[r]["timestamp"].slice(11,23),
+    					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
+    					stops: startRow.stops,
+    					stopIds: startRow.stopIds,
+    					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
+    					disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
+    				};
+    				// console.log(tr);
+    				// console.log(stateRef);
+    				rows.push(tr);
+    				startRow = {};
+    				lastStartIndex = -1;
+	    		}
+    		}
+    		else if ((logs[r].pageField).indexOf("5post") != -1) {
+    			{
+    				if (lastStartIndex != -1) {
+    					console.log("adding post");
+    					thisTime = Math.round((logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000);
+    					startRow.stops += (logs[r].pageField).charAt(5) + ": " + String(thisTime) + " ";
+    					startRow.stopIds.push(logs[r]["_id"]);
+    				}
     			}
     		}
-    		else if (logs[r].pageField == "40stop") {
+    		else if (logs[r].pageField == "5stop") {
     			if (lastStartIndex > -1) {
     				tr = {
     					start: logs[lastStartIndex]["timestamp"].slice(11,23),
-    					stop: logs[r]["timestamp"].slice(11,23),
+    					end: logs[r]["timestamp"].slice(11,23),
     					speed: (logs[r]["epochTime"] - logs[lastStartIndex]["epochTime"]) / 1000,
+    					stops: startRow.stops,
+    					stopIds: startRow.stopIds,
     					id: "start:" + logs[lastStartIndex]["_id"] + "::stop:" + logs[r]["_id"],
     					disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
     				};
@@ -147,7 +181,7 @@ export const YardMath = () => {
     const { devLogs, rows } = useTracker(() => {
     	const handler = Meteor.subscribe('devicelogs');	
     	const devLogs = DeviceCollection.find({$and: [
-	    	{activity: "40 yard dash"},
+	    	{activity: "sprints"},
     		{claimed: {$ne: true} },
     		{cleared: {$ne: true} },
     		// {}
@@ -165,12 +199,10 @@ export const YardMath = () => {
     //   return { ...noDataAvailable, isLoading: true };
     // }
 
-    
-
 	return (
 		// <Grid container spacing={4} alignItems="center"  justifyContent="space-between">
 	<Box>
-		<MicrobitTalker />
+		<MicrobitTalker act="sprints"/>
 		{ rows ? (
 			<Box>	
 				<DataGrid
@@ -188,11 +220,11 @@ export const YardMath = () => {
 			<Button variant="outline" onClick={infoTester} > Tester </Button>
 		</Box>
 		<Box>
-			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="40 yard dash"/>
+			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="sprints"/>
 		</Box>
     </Box>
 
 	)
 }
 
-export default YardMath
+export default PassCount
