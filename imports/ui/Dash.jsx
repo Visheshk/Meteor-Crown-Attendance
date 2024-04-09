@@ -36,9 +36,9 @@ export const Dash = () => {
 	}
 
 	const columns = [
-		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
-		{ field: 'stop', headerName: 'Stop',  width: 150 },
-		{ field: 'speed', headerName: 'Speed (seconds)', width: 150 },
+		{ field: 'start', headerName: 'Start', type: 'text', width: 300 },
+		{ field: 'stop', headerName: 'Stop',  width: 300 },
+		{ field: 'speed', headerName: 'Speed (seconds)', width: 300 },
 		{ field: 'buttons', headerName: '', width: 150,
 			sortable: false,
 		    renderCell: ({ row }) =>
@@ -156,13 +156,21 @@ export const Dash = () => {
 	<Box>
 		<MicrobitTalker act="Dash" />
 		{ rows ? (
-			<Box>	
+			<Box 
+				sx={{
+					fontSize: 120
+				}}
+			>	
 				<DataGrid
+					sx={{
+						fontSize: 30
+					}}
 					rows={rows}
 					columns={columns}
 					pageSize={5}
+					getRowHeight={() => 'auto'}
 					// loading={isLoading}
-					rowHeight={40}
+					// rowHeight={40}
 				  />
 			</Box>
 		  ): 

@@ -5,12 +5,14 @@ module.exports = {
       // host: '157.245.249.73',    old?
       // host: '142.93.118.115',    //nextcloud
       // host: '167.99.224.18',  //salsrc
-      host: '161.35.142.168',
-      username: 'root',
-      // pem: '/Users/vkumar/.ssh/id_rsa',
+      // host: '161.35.142.168',
+      // username: 'root',
+      host: '3.141.192.135', //aws
+      username: 'ubuntu',
+      pem: './combine-ec2.pem',
       // passphrase: 'qezcad',
       // password: 'qezcad'
-      password: 'o2tdmuT37aY#a'
+      // password: 'o2tdmuT37aY#a'
       // password: 'g8hY^vGGMBAbyYC7ok$f'
       // or neither for authenticate from ssh-agent
     }
