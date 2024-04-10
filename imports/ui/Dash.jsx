@@ -156,6 +156,7 @@ export const Dash = () => {
 	<Box>
 		<MicrobitTalker act="Dash" />
 		{ rows ? (
+
 			<Box 
 				sx={{
 					fontSize: 120
