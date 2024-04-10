@@ -27,13 +27,13 @@ export const ScannerComp = ({spotUser}) => {
       }
       else {
         console.log(res);
-        // console.log("setting code visitor");
-        setCodeVisitor(res);
-        // if (this.props){
-        	// console.log(this.props);
-        spotUser({code: barcode, data: res});
+        if (res) {
+          setCodeVisitor(res);
+          spotUser({code: barcode, data: res});
+
         // }
-        return res;
+          return res;
+        }
       }
     });
   }
@@ -58,10 +58,11 @@ export const ScannerComp = ({spotUser}) => {
       </Grid>
       <Grid container item md={3}>
         <Box>
-          <Typography variant="caption" display="block" gutterBottom>
+          <Typography variant="h4" display="block" gutterBottom>
             {/*{JSON.stringify(codeVisitor)}*/}
-            Name: {codeVisitor.name}   barcode: {codeVisitor.barcodeId}
+            Name: {codeVisitor.name}   
           </Typography>
+          <Typography variant="caption" display="block" gutterBottom>barcode: {codeVisitor.barcodeId}  </Typography>
         </Box>
         
         
