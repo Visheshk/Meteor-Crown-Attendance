@@ -126,3 +126,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+.deploy/combine-ec2.pem
+.deploy/combinedump.gz
+.deploy/dump.gz
