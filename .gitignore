@@ -127,3 +127,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 imports/.DS_Store
+.deploy/combine-ec2.pem
+.deploy/combinedump.gz
+.deploy/dump.gz
