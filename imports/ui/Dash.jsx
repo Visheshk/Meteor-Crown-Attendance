@@ -157,21 +157,26 @@ export const Dash = () => {
 		<MicrobitTalker act="Dash" />
 		{ rows ? (
 
-			<Box 
-				sx={{
-					fontSize: 120
-				}}
-			>	
+			<Box>	
 				<DataGrid
-					sx={{
-						fontSize: 30
-					}}
+					
 					rows={rows}
 					columns={columns}
 					pageSize={5}
 					getRowHeight={() => 'auto'}
 					// loading={isLoading}
-					// rowHeight={40}
+					rowHeight={100}
+					sx={{ fontSize: 30, m: 2, p:2, 
+						'& .MuiDataGrid-cell': {
+				          p: 3,
+				        },
+				        '& .MuiDataGrid-columnHeaderTitle': {
+				          p: 3,
+				        }
+				     }}
+				     getCellClassName = {(params) => {
+			          // console.log(params);
+			        }}
 				  />
 			</Box>
 		  ): 

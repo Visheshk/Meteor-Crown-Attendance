@@ -33,9 +33,9 @@ export const Agility = () => {
 	}
 
 	const columns = [
-		{ field: 'start', headerName: 'Start', type: 'text', width: 150 },
-		{ field: 'end', headerName: 'End',  width: 150 },
-		{ field: 'speed', headerName: 'Speed (seconds)', width: 150 },
+		{ field: 'start', headerName: 'Start', type: 'text', width: 300 },
+		{ field: 'end', headerName: 'End',  width: 300 },
+		{ field: 'speed', headerName: 'Speed (seconds)', width: 300 },
 		// { field: 'stops', headerName: 'Posts',  width: 150 },
 		// { field: 'stop 2', headerName: '10 yards',  width: 150 },
 		{ field: 'buttons', headerName: '', width: 150,
@@ -164,7 +164,15 @@ export const Agility = () => {
 					columns={columns}
 					pageSize={5}
 					// loading={isLoading}
-					rowHeight={40}
+					rowHeight={100}
+					sx={{ fontSize: 30, m: 2, p:2, 
+						'& .MuiDataGrid-cell': {
+				          p: 3,
+				        },
+				        '& .MuiDataGrid-columnHeaderTitle': {
+				          p: 3,
+				        }
+				     }}
 				  />
 			</Box>
 		  ): 
