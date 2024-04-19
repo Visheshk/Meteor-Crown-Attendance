@@ -23,6 +23,7 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 	// const [userScores, setUserScores] = useState([]);
 	const [renderReq, setRenderReq ] = useState(false);
 	const [scoreDisplay, setScoreDisplay] = useState(false);
+	const [userData, setUserData] = useState([]);
 	//step 1: get log code to work
 	let pageFeatures = "";
 	let pageTitle = "none";
@@ -153,6 +154,17 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 		// }
 	// }
 
+	const fetchUserData = () => {
+		if (!userId) {
+			setErrorText('No user ID provided!');
+			setToastOpen(true);
+			return;
+		}
+		const userData = ScoreCollection.find({userBarcode: userId}).fetch();
+		console.log("Fetched user data:", userData);
+		setUserData(userData);  // Assuming you want to display this data somewhere
+	}
+
 	return (
 		<Grid container item direction="column" spacing={2}  >
 				<Grid container item direction="row" sx={{display: pageFeatures}}>				
@@ -206,6 +218,37 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
 				{renderReq}
 				</Grid>
 				
+			</Grid>
+			<Grid container item direction="row" alignItems="center" spacing={2}>
+				<Grid item>
+					<TextField
+						label="User ID"
+						variant="outlined"
+						value={userId}
+						onChange={e => setUserId(e.target.value)}
+						fullWidth
+					/>
+				</Grid>
+				<Grid item>
+					<Button variant="contained" color="primary" onClick={fetchUserData}>
+						Fetch User Data
+					</Button>
+				</Grid>
+				<Grid container item>
+					<Grid item xs={12}>
+						{userData.length > 0 ? (
+							<ul>
+								{userData.map((user, index) => (
+									<li key={index}>
+										Event ID: {user.eventId}, Score: {user.score}
+									</li>
+								))}
+							</ul>
+						) : (
+							<Typography variant="subtitle1">No user data found.</Typography>
+						)}
+					</Grid>
+				</Grid>
 			</Grid>
 
 			<Snackbar
