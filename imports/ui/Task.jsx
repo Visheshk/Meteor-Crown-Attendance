@@ -51,7 +51,7 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
             <QRCodeSVG value={visitor.barcodeId} size={256} />
           </Modal>
            
-          <Typography>Name: {visitor.name}</Typography>
+          <Typography>Name: {visitor.name}, Player: {visitor.clubMember}</Typography>
         </Box>
       
 
