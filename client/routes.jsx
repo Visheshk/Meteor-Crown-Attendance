@@ -15,6 +15,7 @@ import FiveTen from '../imports/ui/FiveTen'
 import Dash from '../imports/ui/Dash'
 import Agility from '../imports/ui/Agility'
 import Count from '../imports/ui/Count'
+import Jump from '../imports/ui/Jump'
 
 FlowRouter.route("/", {
 	name: 'index',
@@ -77,7 +78,15 @@ FlowRouter.route("/count", {
 	}
 })
 
-
+FlowRouter.route("/jump", {
+	name: 'jump',
+	action () {
+	    mount( AppRoute, {
+	      content: <Jump />
+	    })
+	    // console.log("route>?");
+	}
+})
 
 
 FlowRouter.route("/40yard", {

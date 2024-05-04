@@ -21,9 +21,10 @@ export const MicrobitTalker = ({act}) => {
 
 	const stateRef = useRef();
 	stateRef.current=pageField;
-	console.log(act);
+	// console.log(act);
 
 	let activity = "Dash";
+	let dataF = 0;
 	if (act) {
 		activity = act;	
 	}
@@ -50,7 +51,7 @@ export const MicrobitTalker = ({act}) => {
   document.addEventListener('visibilitychange', handleVisibilityChange);
 
 
-  console.log(navigator.wakeLock);
+  // console.log(navigator.wakeLock);
 
 	let microbitLogs = {
 		"40ydstart": {"pageField": "40start", "activity": "40 yard dash"},
@@ -63,7 +64,9 @@ export const MicrobitTalker = ({act}) => {
 
 
 	const uartMessage = function (event) {
-		console.log(JSON.stringify(event.detail, null, 2));
+		// console.log(JSON.stringify(event, null, 2));
+		// console.log(JSON.stringify(event.detail, null, 2));
+		// console.log(JSON.stringify(event.detail, null, 2));
 		setDataField(event.detail);
 
 		if (event.detail == "40ydstart") {
@@ -92,6 +95,17 @@ export const MicrobitTalker = ({act}) => {
 		else if (event.detail == "countcross") {
 			setPageField("countcross");
 			activity = "Count";
+		}
+
+		else if ((event.detail).indexOf("jump") == 0) {
+			// console.log("spotted jump");
+			setPageField("jumpheight");
+			activity = "Jump";
+			a = (event.detail).trim();
+			a = parseInt(a.split(":")[1]);
+			setDataField(a);
+			dataF = a;
+			// console.log(dataField, dataF);
 		}
 
 
@@ -142,13 +156,14 @@ export const MicrobitTalker = ({act}) => {
     };
 
     const postData = event => {
-    	console.log(dataField, pageField);
-    	console.log(activity);
+    	// console.log(dataField, pageField, dataF);
+    	// console.log(stateRef.current, logging);
+    	// console.log(logging);
     	
     	if (stateRef.current != "" && logging == true) {
     		// console.log(activity);
 	    	let newLog = {
-					"microbitMessage": dataField,
+					"microbitMessage": dataF,
 					"pageField": stateRef.current,
 					"activity": activity ///***TODO: make this dyanimc/inherited from yard math
 				}
