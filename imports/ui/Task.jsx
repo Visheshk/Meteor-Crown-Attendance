@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 // import Lightbox from 'react-image-lightbox';
 // import 'react-image-lightbox/style.css';
 // import { renderToString } from 'react-dom/server';
@@ -30,46 +33,28 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
   }
 
   return (
-    <li>
-      <input
-        type="checkbox"
-        // checked={!!task.isChecked}
-        // onClick={() => onCheckboxClick(task)}
-        readOnly
-      />
-      {/*TODO: add an error boundary or check so this baarcode component doesn't crash everything*/}
-      <div onClick={codeZoom}>
-        {
-          visitor.barcodeId.length > 0 &&
-            // <Barcode value={visitor.barcodeId} options={{height:50, width: 3}} />
-            <QRCodeSVG value={visitor.barcodeId} />
-        }
-      </div>
+    <>
+      
+        <Box md={1} sx={{ width: '100%', maxWidth: 150 }}>
+          
+          {/*TODO: add an error boundary or check so this baarcode component doesn't crash everything*/}
+          <div onClick={codeZoom}>
+            {
+              visitor.barcodeId.length > 0 &&
+                // <Barcode value={visitor.barcodeId} options={{height:50, width: 3}} />
+                <QRCodeSVG value={visitor.barcodeId} />
+            }
+          </div>
 
-      {/* Modal component */}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <QRCodeSVG value={visitor.barcodeId} size={256} />
-      </Modal>
-       
-      <span>Name: {visitor.name}, dob: {visitor.dob}, {JSON.stringify(visitor)}</span>
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%', // Adjust as needed
-        height: 'auto', // Adjust as needed, or use a specific value
-        
-        p: 2, // Padding inside the box, adjust as needed
-        gap: 2, // Space between children
-      }}>
-        <Button variant="outline" onClick={() => /*editVisitor({"visitor": visitor._id})*/null}>Edit </Button>
-        <Button variant="outline" onClick={() => makeNewBarcode({"visitor": visitor._id})}>Make new barcode</Button>
-        <Button variant="outline" onClick={() => onAddVisit({"visitor": visitor._id, "room": "test"})}>Add visit</Button>
+          {/* Modal component */}
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+            <QRCodeSVG value={visitor.barcodeId} size={256} />
+          </Modal>
+           
+          <Typography>Name: {visitor.name}</Typography>
+        </Box>
+      
 
-      </Box>
-
-
-    </li>
+      </>
   );
 };

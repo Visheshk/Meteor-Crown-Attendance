@@ -129,6 +129,22 @@ Meteor.methods({
     {upsert: true})
   },
 
+  'visitors.qrNameUpdate' (qrcode, newname) {
+    // newData = {};
+    // newData[field] = value;
+    // setQuery = {$set: newData}
+    // console.log("bcd up")
+    VisitorsCollection.update (
+    { barcodeId: qrcode }, 
+    { $set: { "name": newname } },
+    // { upsert: true }
+    );
+    // console.log(newvid);
+    // newvBar = Meteor.call('visitors.barUpdate', newvid)
+    // console.log(newvBar);
+    // return newvBar;
+  },
+
   'visitors.nameUpdate' (name, field, value) {
     newData = {};
     newData[field] = value;

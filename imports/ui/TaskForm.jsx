@@ -10,7 +10,15 @@ export const TaskForm = () => {
     Meteor.call('visitors.insert', e.target.name.value, e.target.age.value, e.target.gender.value, e.target.dob.value)
   };
 
+  const editUser = e => {
+    e.preventDefault();
+    console.log(e.target.qrcode.value, e.target.name.value);
+    // Meteor.call('visitors.insert', e.target.name.value, e.target.age.value, e.target.gender.value, e.target.dob.value)
+    Meteor.call('visitors.qrNameUpdate', e.target.qrcode.value, e.target.name.value);
+  };
+
   return (
+    <>
     <form className="task-form" onSubmit={handleSubmit}>
       <p className='form-field-title'>Name: <input type="text" name="name" placeholder="name" required /> </p>
       <p className='form-field-title'>Age: <input type="number" name="age" placeholder="age"  /></p>
@@ -18,7 +26,13 @@ export const TaskForm = () => {
       <p className='form-field-title'>Date of Birth: <input type="date" name="dob"  /></p>
       <button type="submit">Add Visitor</button>
     </form>
-
+    <form className="task-form" onSubmit={editUser}>
+      <p className='form-field-title'>qr code: <input type="number" name="qrcode" required /> </p>
+      <p className='form-field-title'>New name: <input type="text" name="name" placeholder="new name"  /></p>
+      
+      <button type="submit">Edit Visitor</button>
+    </form>
+    </>
     
   );
 };
