@@ -114,7 +114,7 @@ export const Room = ({spotUser, eventSetter, parentActivity}) => {
   const lockEvent = (event) => {
   	Session.set('eventId', eventId);
   	Session.set('activity', pageActivity);
-  	eventSetter(eventId);
+  	// eventSetter(eventId);
   	setRenderReq(renderReq + 1);
   	// setEventId(eventId + "");
   	// setPageFeatures(true);
