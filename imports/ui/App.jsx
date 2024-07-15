@@ -10,7 +10,13 @@ import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm';
 import { UserLogger } from './UserLogger';
 import { ScannerComp } from './ScannerComp';
-import Grid from '@mui/material/Grid';
+import { Grid, TextField, Button, Box } from '@mui/material';
+// import {} from '@mui/material/Accordion';
+// import  from '@mui/material/AccordionActions';
+// import  from '@mui/material/AccordionSummary';
+// import  from '@mui/material/AccordionDetails';
+// import  from '@mui/icons-material/ExpandMore';
+
 
 const toggleChecked = ({ _id, isChecked }) =>
   Meteor.call('tasks.setIsChecked', _id, !isChecked);
@@ -32,6 +38,7 @@ export const App = () => {
   // const [camData, setCamData] = useState(0);
   // const [stopStream, setStopStream] = useState(true);
   // const [codeVisitor, setCodeVisitor] = useState({});
+  const [visitorFilter, setVisitorFilter] = useState("");
 
   const hideCompletedFilter = { isChecked: { $ne: true } };
 
@@ -44,6 +51,11 @@ export const App = () => {
     setStopStream(!stopStream);
     console.log(stopStream);
     // setTimeout(() => closeModal(), 0);
+  }
+  
+  const changeVisitorFilter = () => {
+    // setVisitorFilter()
+
   }
 
   
@@ -74,12 +86,17 @@ export const App = () => {
     if (!handler.ready()) {
       return { ...noDataAvailable, isLoading: true };
     }
+    /.*son.*/
+    console.log(visitorFilter);
 
-    const visitors = VisitorsCollection.find({}).fetch();
+    // const visitors = VisitorsCollection.find({name: new RegExp("/.*" + visitorFilter + ".*/")}).fetch();
+    const visitors = VisitorsCollection.find({name: {$regex: visitorFilter}}).fetch();
+
+    console.log(visitors);
     // console.log(visitors);
     const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
 
-    return { visitors, pendingTasksCount };
+    return { visitors, pendingTasksCount, visitorFilter};
   });
 
   async function checkBarcode (barcode) {
@@ -132,8 +149,21 @@ export const App = () => {
                   {isLoading && <div className="loading">loading...</div>}
 
                   <TaskForm />
-                  
+
+                 
+                  <Box md={1} sx={{ width: '100%', maxWidth: 150, padding: 1 }}>
+                   <TextField 
+                      id="outlined-basic" 
+                      label="Name Filter" 
+                      variant="outlined" 
+                      size="small"
+                      onChange={e => setVisitorFilter(e.target.value)}
+                    />
+                  </Box>
+
                   <Grid direction="row" container spacing={0} md={12} justifyContent="flex-start" alignItems="flex-start">
+                    
+                  
                     {visitors.map(visitor => (
                       <Task
                         key={visitor._id}
