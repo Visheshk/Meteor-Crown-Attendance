@@ -16,6 +16,7 @@ import { ScannerComp } from './ScannerComp';
 import { VisitorLogs } from './VisitorLogs';
 import { MicrobitTalker } from './MicrobitTalker';
 
+import ScoreboardClock from './dashscoreboard'
 export const Dash = () => {
 
 	const [speedRows, setSpeedRows] = useState([]);
@@ -36,10 +37,10 @@ export const Dash = () => {
 	}
 
 	const columns = [
-		{ field: 'start', headerName: 'Start', type: 'text', width: 300 },
-		{ field: 'stop', headerName: 'Stop',  width: 300 },
-		{ field: 'speed', headerName: 'Speed (seconds)', width: 300 },
-		{ field: 'buttons', headerName: '', width: 150,
+		{ field: 'start', headerName: 'Start', flex:1, minWidth: 100 },
+		{ field: 'stop', headerName: 'Stop', flex:1,  minWidth: 100 },
+		{ field: 'speed', headerName: 'Speed (seconds)', flex:1,  minWidth: 100 },
+		{ field: 'buttons', headerName: '', minWidth:100, flex:1,
 			sortable: false,
 		    renderCell: ({ row }) =>
 		    	<Button size="small" variant="outlined" disabled={row.disabled} onClick={() => claimEntry(row)}>
@@ -48,6 +49,13 @@ export const Dash = () => {
 		 },
 		// { field: 'date', headerName: 'Date Created', width: 110 },
 	];
+
+	// const columns = [
+	// 	{ field: 'start', headerName: 'Start', minWidth: 100 },
+	// 	{ field: 'stop', headerName: 'Stop',  minWidth: 100 },
+	// 	{ field: 'speed', headerName: 'Speed (seconds)',  minWidth: 100 },
+	// ];
+	
 
 	// const deleteEntry = function (row) {
 	const claimEntry = function (row) {
@@ -158,37 +166,21 @@ export const Dash = () => {
 		{ rows ? (
 
 			<Box>	
-				<DataGrid
-					
-					rows={rows}
-					columns={columns}
-					pageSize={5}
-					getRowHeight={() => 'auto'}
-					// loading={isLoading}
-					rowHeight={100}
-					sx={{ fontSize: 30, m: 2, p:2, 
-						'& .MuiDataGrid-cell': {
-				          p: 3,
-				        },
-				        '& .MuiDataGrid-columnHeaderTitle': {
-				          p: 3,
-				        }
-				     }}
-				     getCellClassName = {(params) => {
-			          // console.log(params);
-			        }}
-				  />
+				<ScoreboardClock rows={rows} columns={columns} />
+
 			</Box>
 		  ): 
 		<> </>}
-		<Box>
-			<Button variant="contained" onClick={clearLogs} > Clear </Button>
-			<Button variant="outline" onClick={infoTester} > Tester </Button>
+		<Box display="flex" justifyContent="center" alignItems="center">
+    		<Button variant="contained" onClick={clearLogs}>Clear</Button>
+   			<Button variant="outlined" onClick={infoTester}>Tester</Button>
 		</Box>
+
 		<Box>
 			<ChildRoom spotUser = {childUserIdUpdate} eventSetter = {setEventId}  parentActivity="Dash"/>
 		</Box>
     </Box>
+	
 
 	)
 }

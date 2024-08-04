@@ -8,14 +8,17 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.15.4",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
+    "@babel/runtime": "^7.24.8",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@ericblade/quagga2": "^1.8.2",
     "@fontsource/rajdhani": "^5.0.8",
-    "@mui/joy": "^5.0.0-beta.25",
-    "@mui/material": "^5.15.7",
-    "@mui/x-data-grid": "^6.19.2",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/icons-material": "^5.16.4",
+    "@mui/joy": "^5.0.0-beta.48",
+    "@mui/material": "^5.16.4",
+    "@mui/x-data-grid": "^6.20.3",
     "bcrypt": "^5.0.1",
     "caniuse-lite": "^1.0.30001521",
     "meteor-node-stubs": "^1.1.0",
@@ -29,7 +32,7 @@
     "react-mounter": "^1.2.0",
     "react-qr-barcode-scanner": "^1.0.6",
     "react-router": "^6.21.0",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.25.0",
     "webrtc-adapter": "^8.2.3"
   },
   "meteor": {

@@ -16,6 +16,7 @@ import Dash from '../imports/ui/Dash'
 import Agility from '../imports/ui/Agility'
 import Count from '../imports/ui/Count'
 import Jump from '../imports/ui/Jump'
+import Summary from '../imports/ui/Summary'
 
 FlowRouter.route("/", {
 	name: 'index',
@@ -147,3 +148,12 @@ FlowRouter.route("/scoreboard", {
 	    })
 	}
 })
+
+FlowRouter.route("/summary", { 
+	name: 'summary',
+	action() {
+	  mount(AppRoute, {
+		content: <Summary />
+	  })
+	}
+  })
