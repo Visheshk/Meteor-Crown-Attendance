@@ -1,14 +1,7 @@
 import React, { useState } from 'react';
 // import Barcode from 'react-jsbarcode';
 import { QRCodeSVG } from 'qrcode.react';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-
-// import Lightbox from 'react-image-lightbox';
-// import 'react-image-lightbox/style.css';
-// import { renderToString } from 'react-dom/server';
+import {Button, Box, Grid, Typography, TextField} from '@mui/material';
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -36,7 +29,6 @@ export const Task = ({ visitor, onAddVisit, makeNewBarcode }) => {
     <>
       
         <Box md={1} sx={{ width: '100%', maxWidth: 150 }}>
-          
           {/*TODO: add an error boundary or check so this baarcode component doesn't crash everything*/}
           <div onClick={codeZoom}>
             {

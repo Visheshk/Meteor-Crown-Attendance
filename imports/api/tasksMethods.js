@@ -64,7 +64,7 @@ Meteor.methods({
     return VisitorsCollection.findOne({"barcodeId": code});
   },
 
-  'visitors.insert'(name, age, gender, dob, notes) {
+  'visitors.insert'(name, notes) {
     // check(text, String);
 
     if (!this.userId) {
@@ -82,9 +82,9 @@ Meteor.methods({
 
     VisitorsCollection.insert({
       name: name,
-      gender: gender,
-      age: age,
-      dob: dob, 
+      // gender: gender,
+      // age: age,
+      // dob: dob, 
       notes: notes,
       currentRoom: "brand new",
       index: visCount,
