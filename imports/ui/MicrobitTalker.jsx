@@ -98,14 +98,17 @@ export const MicrobitTalker = ({act}) => {
 		}
 
 		else if ((event.detail).indexOf("jump") == 0) {
-			// console.log("spotted jump");
+			console.log("spotted jump");
+			console.log(event.detail);
 			setPageField("jumpheight");
 			activity = "Jump";
 			a = (event.detail).trim();
 			a = parseInt(a.split(":")[1]);
+
 			setDataField(a);
+
 			dataF = a;
-			// console.log(dataField, dataF);
+			console.log(dataField, dataF);
 		}
 
 
@@ -161,12 +164,15 @@ export const MicrobitTalker = ({act}) => {
     	// console.log(logging);
     	
     	if (stateRef.current != "" && logging == true) {
-    		// console.log(activity);
+    		console.log(activity);
+    		console.log(dataField);
+    		dataF = dataField;
 	    	let newLog = {
 					"microbitMessage": dataF,
 					"pageField": stateRef.current,
 					"activity": activity ///***TODO: make this dyanimc/inherited from yard math
 				}
+				console.log(newLog);
 				Meteor.call('device.addLog', newLog);
 			}
 			else {

@@ -133,12 +133,15 @@ export const Jump = () => {
 	 	let rows = [];
 	 	for (let r in logs) {
 	 		// console.log(logs[r]);
-	 		tr = {
-	 			jump: logs[r]["microbitMessage"],
-	 			id:logs[r]["_id"],
-	 			disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
-	 		}
-	 		rows.push(tr);
+	 		if (logs[r].pageField == "jumpheight") {
+		 		tr = {
+		 			jump: logs[r]["microbitMessage"],
+		 			id:logs[r]["_id"],
+		 			disabled: (Object.keys(stateRef.current[1]).length == 0 || stateRef.current[2] == "")
+		 		}
+		 		rows.push(tr);
+		 	}
+	 		
 	 	}
 	 	return rows;
 	 }
@@ -148,6 +151,7 @@ export const Jump = () => {
     	const handler = Meteor.subscribe('devicelogs');	
     	const devLogs = DeviceCollection.find({$and: [
 	    	{activity: "Jump"},
+
     		{claimed: {$ne: true} },
     		{cleared: {$ne: true} },
     		// {}

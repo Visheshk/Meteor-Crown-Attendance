@@ -28,7 +28,7 @@ export const TaskForm = () => {
     // console.log(bulkNo, bulkName);
     if (bulkNo > 0 && bulkName != "") {
       for (var x = 1; x <= bulkNo; x++) {
-        Meteor.call('visitors.insert', pre + String(bulkName))
+        Meteor.call('visitors.insert', bulkName + String(x))
       }
     }
     else {
