@@ -8,7 +8,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
+
+import Tooltip from '@mui/material/Tooltip';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+
+
 import Switch from '@mui/material/Switch';
+import { styled } from '@mui/material/styles';
+
+
 
 // import {YardMath} from './YardMath';
 
@@ -149,14 +157,13 @@ export const MicrobitTalker = ({act}) => {
 		// console.log(button);
 	}
 
-		const pageFieldChange = event => {
-        setPageField(event.target.value);
-        // console.log(pageField);
-    };
-
-    const handleValueChange = event => {
-        setDataField(event.target.value);
-    };
+	const pageFieldChange = (event) => {
+		setPageField(event.target.value);
+	  };
+	  
+	const handleValueChange = (event) => {
+		setDataField(event.target.value);
+	};
 
     const postData = event => {
     	// console.log(dataField, pageField, dataF);
@@ -214,52 +221,91 @@ export const MicrobitTalker = ({act}) => {
 
 	}
 
+	const getInstructions = (activity) => {
+		switch (activity) {
+			case 'Dash':
+				return "i am in dash for instructions"
+
+			case 'Agility':
+				return 'Instructions for the Agility activity';
+			case 'Count':
+				return "temp"
+			case 'FiveTen':
+				return "temp"
+			case 'Jump':
+				return "temp"
+	
+			default:
+				return 'General instructions';
+		}
+	  };
+
+
 	return (
-		<Grid container item direction="column" spacing={10} md={8} justifyContent="space-around">
-			<Grid container item direction="row" spacing={1} alignItems="center"  justifyContent="space-between">
-					<Grid item md={1}>
-					</Grid>
-					<Grid item md={2}>
-						<Button variant="outlined" onClick={connectBit}> Connect </Button>
-					</Grid>
-					
-					<Grid item  md={3}>
-						<TextField 
-							id="microbitDataField" 
-							label="Property" 
-							variant="filled" 
-							// value= {pageField}
-				      onChange= {pageFieldChange}
-						/>
-					</Grid>
-					<Grid item md={3}>
-						<TextField 
+	
+	<Box display="flex" justifyContent="center" alignItems="center" >
+	{/* <StyledContainer container item direction="column" spacing={2} md={10} justifyContent="center" alignItems="center"> */}
+	  <Grid item>
+		<Typography variant="h4" color="primary.main">
+		  Connect Microbit
+		</Typography>
+	  </Grid>
+	  <Grid container item direction="row" spacing={2} alignItems="center" justifyContent="center">
+		<Grid item>
+		  <Button variant="contained" onClick={connectBit}>
+			Connect
+		  </Button>
+		</Grid>
+		<Grid item>
+		<TextField
+			id="microbitDataField"
+			label="Property"
+			variant="filled"
+			value={pageField}
+			onChange={pageFieldChange}
+			InputProps={{
+				spellCheck: false,
+			}}
+			/>
+		</Grid>
+		<Grid item>
+							<TextField 
 							id="manualDataValue" 
 							label="Value" 
 							variant="filled" 
 							value= {dataField}
 				      onChange= {handleValueChange}
 						/>
-
-					</Grid>
-					<Grid item md={1}>
-						<Button variant="outlined" onClick={postData}> Post Data</Button>
-					</Grid>
-					<Grid item md={1}>
-						<Switch checked={logging} onChange={toggleLogging} /> <Typography variant="body1" component="h3">
-							  Toggle logging
-						</Typography>
-					</Grid>
-					
-
-	    </Grid>
-	    <Grid container item direction="row" spacing={4} alignItems="center">
-			    <Grid item md={1}>
-					</Grid>
-			    {/*<YardMath />*/}
-		   </Grid>
-	   </Grid>
+		</Grid>
+		<Grid item>
+		  <Button variant="contained" onClick={postData}>
+			Post Data
+		  </Button>
+		</Grid>
+		<Grid item>
+		  <FormControlLabel
+			control={<Switch checked={logging} onChange={toggleLogging} />}
+			label={
+			  <Typography variant="body1" color="primary.main">
+				Toggle Logging
+			  </Typography>
+			}
+		  />
+		</Grid>
+		<Grid item>
+		  <Tooltip title={getInstructions(act)}>
+			<HelpOutlineIcon color="primary.main" />
+		  </Tooltip>
+		</Grid>
+	  </Grid>
+	{/* </StyledContainer> */}
+  </Box>
 	)
 }
 
 export default MicrobitTalker
+
+
+
+
+

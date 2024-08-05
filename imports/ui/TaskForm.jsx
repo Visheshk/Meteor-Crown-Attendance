@@ -1,10 +1,13 @@
+
 import { Meteor } from 'meteor/meteor';
 import { TextField, Button, Container, Stack, FormControl, Grid, Box } from '@mui/material';
 import React, { useState } from 'react';
 import {Accordion, AccordionActions, AccordionSummary, AccordionDetails} from '@mui/material';
 import {ExpandMoreIcon} from '@mui/icons-material';
 
+
 export const TaskForm = () => {
+  const classes = useStyles();
   const [text, setText] = useState('');
   const [visitorName, setVisitorName] = useState("");
   const [bulkNo, setBulkNo] = useState(1);
@@ -50,7 +53,7 @@ export const TaskForm = () => {
     }
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(e.target.age.value);
     // Meteor.call('visitors.insert', e.target.name.value, e.target.age.value, e.target.gender.value);
@@ -66,13 +69,13 @@ export const TaskForm = () => {
     }
   };
 
-  const editUser = e => {
+  const editUser = (e) => {
     e.preventDefault();
     console.log(e.target.qrcode.value, e.target.name.value);
     Meteor.call('visitors.qrNameUpdate', e.target.qrcode.value, e.target.name.value);
   };
 
-  const editUserFeature = e => {
+  const editUserFeature = (e) => {
     e.preventDefault();
     Meteor.call('visitors.qrFeatureUpdate', e.target.qrcode.value, e.target.feature.value, e.target.featureVal.value);
   };
