@@ -37,10 +37,10 @@ export const Dash = () => {
 	}
 
 	const columns = [
-		{ field: 'start', headerName: 'Start', flex:1, minWidth: 100 },
-		{ field: 'stop', headerName: 'Stop', flex:1,  minWidth: 100 },
-		{ field: 'speed', headerName: 'Speed (seconds)', flex:1,  minWidth: 100 },
-		{ field: 'buttons', headerName: '', minWidth:100, flex:1,
+		{ field: 'start', headerName: 'Start',  minWidth: 300 },
+		{ field: 'stop', headerName: 'Stop',   minWidth: 300 },
+		{ field: 'speed', headerName: 'Speed (seconds)',  minWidth: 300 },
+		{ field: 'buttons', headerName: '', minWidth:150,
 			sortable: false,
 		    renderCell: ({ row }) =>
 		    	<Button size="small" variant="outlined" disabled={row.disabled} onClick={() => claimEntry(row)}>
@@ -161,7 +161,7 @@ export const Dash = () => {
 
 	return (
 		// <Grid container spacing={4} alignItems="center"  justifyContent="space-between">
-	<Box>
+	<Box sx={{ p: 2, m:2 }}>
 		<MicrobitTalker act="Dash" />
 		{ rows ? (
 

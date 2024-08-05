@@ -246,9 +246,6 @@ export const MicrobitTalker = ({act}) => {
 	<Box display="flex" justifyContent="center" alignItems="center" >
 	{/* <StyledContainer container item direction="column" spacing={2} md={10} justifyContent="center" alignItems="center"> */}
 	  <Grid item>
-		<Typography variant="h4" color="primary.main">
-		  Connect Microbit
-		</Typography>
 	  </Grid>
 	  <Grid container item direction="row" spacing={2} alignItems="center" justifyContent="center">
 		<Grid item>

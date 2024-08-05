@@ -1,172 +1,211 @@
+import React, { useState, useMemo} from 'react';
+import { ScannerComp } from './ScannerComp';
+import { VisitorLogs } from './VisitorLogs';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
+import Snackbar from '@mui/material/Snackbar';
+import { useTracker } from 'meteor/react-meteor-data';
 
-import React, { useState, useMemo } from "react";
-import { ScannerComp } from "./ScannerComp";
-import { VisitorLogs } from "./VisitorLogs";
-import { Button, Grid, TextField, Typography, Snackbar } from "@mui/material";
-import { useTracker } from "meteor/react-meteor-data";
-import { ScoreCollection } from "/imports/db/TasksCollection";
+import { ScoreCollection } from '/imports/db/TasksCollection';
 
-export const ChildRoom = ({ spotUser, eventSetter, parentActivity }) => {
-  const [eventId, setEventId] = useState("");
-  const [activityScore, setActivityScore] = useState("");
-  const [userId, setUserId] = useState("");
-  const [userInfo, setUserInfo] = useState({});
-  const [toastOpen, setToastOpen] = useState(false);
-  const [errorText, setErrorText] = useState("");
-  const [renderReq, setRenderReq] = useState(false);
+export const ChildRoom = ({spotUser, eventSetter, parentActivity}) => {
+	const [pageActivity, setPageActivity] = useState("");
+	const [eventId, setEventId] = useState("");
+	const [activityScore, setActivityScore] = useState('');
+	const [userId, setUserId] = useState('');
+	const [userInfo, setUserInfo] = useState({});
+	const [toastOpen, setToastOpen] = useState(false);
+	const [errorText, setErrorText] = useState('');
+	// const [pageFeatures, setPageFeatures] = useState(false);
+	// const [userScores, setUserScores] = useState([]);
+	const [renderReq, setRenderReq ] = useState(false);
+	const [scoreDisplay, setScoreDisplay] = useState(false);
+	//step 1: get log code to work
+	let pageFeatures = "";
+	let pageTitle = "none";
 
-  const handler = Meteor.subscribe("scorelogs");
-  const scores = ScoreCollection.find({}).fetch();
+	if (Session.get('activity') && Session.get('eventId') && Session.get('activity') != '' && Session.get('eventId') != '' ) {
+		pageFeatures = "none";
+		pageTitle = "";
+	}
+	else {
+		pageFeatures = "";
+		pageTitle = "none";
+	}
 
-  const postLog = () => {
-    let errText = "";
-    if (eventId === "") errText += " no event id! \n";
-    if (activityScore === "") errText += " no score! \n";
-    if (userId === "") errText += " no user! \n";
-    if (parentActivity === "") errText += " no activity name name! \n";
+	if (parentActivity) {
+		// setPageActivity(parentActivity);
+	}
 
-    if (errText !== "") {
-      setErrorText(errText);
-      setToastOpen(true);
-    } else {
-      const log = {
-        activity: parentActivity,
-        eventId,
-        score: activityScore,
-        userBarcode: userId,
-        userInfo,
-      };
-      Meteor.call("score.addLog", log);
-      setRenderReq((prev) => prev + 1);
-    }
+  	const handler = Meteor.subscribe('scorelogs');	
+  	const scores = ScoreCollection.find({}).fetch();
+
+	const postLog = function () {
+		// console.log(featureVal);
+		// console.log(userId);
+		let errText = '';
+		if (eventId == '') {
+			errText += ' no event id! \n';
+		}
+		if (activityScore == '') {
+			errText += ' no score! \n';
+		}
+		if (userId == '') {
+			errText += ' no user! \n';
+		}
+		if (pageActivity == '') {
+			errText += ' no activity name name! \n';
+		}
+		if (errText != '') {
+			setErrorText(errText);
+			setToastOpen(true);
+		}
+		else {
+			// dd = new Date();
+			log = { 
+				"activity": pageActivity, 
+				"eventId": eventId,
+				"score": activityScore, 
+				// "epochTime": dd.getTime(), 
+				"userBarcode": userId,
+				"userInfo": userInfo,
+				// "timestamp": dd.toISOString()
+			 };
+			Meteor.call('score.addLog', log)
+			let uid = userId
+			setRenderReq(renderReq + 1);
+			console.log(renderReq);
+			// setUserId(userId +" ");
+			// setUserId(uid);
+		}
+	}
+
+	
+
+	const childUserIdUpdate = ({code, data}) => {
+		setUserId(code);
+		setUserInfo(data);
+		console.log(data);
+		console.log(userInfo);
+		console.log(userId, userInfo);
+		if (spotUser) {
+			spotUser({"data": data});
+		}
+	}
+	const handleClose = (event) => {
+    setToastOpen(false);
   };
 
-  const childUserIdUpdate = ({ code, data }) => {
-    setUserId(code);
-    setUserInfo(data);
-    if (spotUser) spotUser({ data });
-  };
-
-  const lockEvent = () => {
-    Session.set("eventId", eventId);
-    Session.set("activity", parentActivity);
-    eventSetter(eventId);
-    setRenderReq((prev) => prev + 1);
-  };
-
-  const userScores = useMemo(
-    () =>
-      scores.filter(
-        (x) => x.eventId === eventId && x.activity === parentActivity
-      ),
-    [scores, eventId, parentActivity]
-  );
-
-  const pageFeatures = useMemo(
-    () => !!(parentActivity && eventId),
-    [parentActivity, eventId]
-  );
+  const lockEvent = (event) => {
+  	Session.set('eventId', eventId);
+  	Session.set('activity', parentActivity);
+  	eventSetter(eventId);
+  	setRenderReq(renderReq + 1);
+  	// setEventId(eventId + "");
+  	// setPageFeatures(true);
+  	pageFeatures = "none";
+  	// pageFeatures = "none";
+		pageTitle = "";
+  }
 
 
-  return (
-  <Grid container direction="column" spacing={2} style={{ paddingTop: '20px' }}>
-    <Grid item xs={12} container justifyContent="center" alignItems="center">
-      <Typography 
-        variant="h3" 
-        component="h1" 
-        fontWeight="bold" 
-        style={{ 
-          marginBottom: '20px',
-          textAlign: 'center',
-          color: '#212121', // This is Material-UI's primary blue color. Adjust as needed.
-          textTransform: 'uppercase',
-          paddingLeft: '10px'
+	const errorNotify = function () {
+		
+	}
+	const userScores = useMemo( () => {	
+			uss = scores.filter(x => {return  x.eventId == eventId && x.activity == parentActivity});
+			console.log(scores, uss, eventId, parentActivity);
+			// setRenderReq(renderReq + 1);
+			return  uss;
+		}, [pageActivity, eventId, scores] )
 
-        }}
-      >
-        {parentActivity}
-      </Typography>
-    </Grid>
+	const pageFeatures2 = useMemo(() => {
+			if (pageActivity && eventId) {
+				return true;
+			}
+			else {
+				return false;
+			}
+			// return scores.filter(x => {return  x.eventId == eventId && x.userBarcode == userId});		
+		}, [pageActivity, eventId])
+	// if (userId != '' && pageActivity != '' && eventId != '') {
+		
+		// if (uss.length > 0){
+		// 	// setScoreDisplay(true);
+		// 	console.log(uss);
+		// 	// setUserScores(uss);
+			
+		// }
+	// }
 
-    <Grid container spacing={2} justifyContent="center" alignItems="center">
-      <Grid item xs={12} md={8} lg={6}>
-        <ScannerComp spotUser={childUserIdUpdate} />
-      </Grid>
-    </Grid>
+	return (
+		<Grid container item direction="column" spacing={2}  >
+				<Grid container item direction="row" sx={{display: pageFeatures}}>				
+					<Grid container item md={6} >
+						<Typography variant="h5" component="h3">
+							  {parentActivity}
+						</Typography>
+					</Grid>
+					<Grid container item md={3}>
+						<TextField id="eventID" label="Event ID" variant="standard" onChange={event => setEventId(event.target.value)}/>
+					</Grid>
+					<Grid container item md={2}>
+						<Button id="saveDeets" size="small" onClick={lockEvent}>Save</Button>
+					</Grid>
+				</Grid>
 
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      spacing={1}
-      style={{ paddingTop: "20px" }}
-    >
-      <Grid item>
-        <TextField
-          id="eventID"
-          label="Event ID"
-          variant="outlined"
-          value={eventId}
-          onChange={(e) => setEventId(e.target.value)}
-          style={{ width: "200px" }}
-        />
-      </Grid>
-      <Grid item>
-        <Button
-          id="saveDeets"
-          onClick={lockEvent}
-          variant="contained"
-          style={{ width: "100px", height: "56px" }}
-        >
-          Save
-        </Button>
-      </Grid>
-      <Grid item>
-        <TextField
-          id="activityScore"
-          label="Activity Score"
-          variant="outlined"
-          value={activityScore}
-          onChange={(e) => setActivityScore(e.target.value)}
-          style={{ width: "200px" }}
-        />
-      </Grid>
-      <Grid item>
-        <Button
-          id="logData"
-          onClick={postLog}
-          variant="contained"
-          style={{ width: "100px", height: "56px" }}
-        >
-          Log
-        </Button>
-      </Grid>
-    </Grid>
+				<Grid container item direction="row" sx={{display: pageTitle}} alignItems="center">
+					<Grid container item md={8} zeroMinWidth>
+						<Typography variant="h3" component="h3">
+							  {parentActivity}
+						</Typography>
+					</Grid>
+					<Grid container item md={3}>
+						<Typography variant="h5" component="h5">
+							  {eventId}
+						</Typography>
+					</Grid>
+					{/*<Grid container item md={2}>
+						<Button id="changeDeets" size="small" onClick={unlockEvent}>Change</Button>
+					</Grid>*/}
+				</Grid>
+			<Grid container item md={8}>
+				<ScannerComp spotUser = {childUserIdUpdate}/>
+			</Grid>
+			
+			<Grid container item  direction="row">
+				<Grid container item md={3}>
+					<TextField id="activityScore" label="Activity Score" variant="standard" onChange={event => setActivityScore(event.target.value)}/>
+				</Grid>
+				<Grid container item md={2}>
+					<Button id="logData" onClick={postLog} variant="outlined">Log</Button>
+				</Grid>
+			</Grid>
 
-    <Grid container item justifyContent="center">
-      <Grid item xs={12} md={6}>
-        <VisitorLogs scores={userScores} updateReq={renderReq} />
-      </Grid>
-      <Grid item xs={12} md={1} sx={{ display: "none" }}>
-        {renderReq}
-      </Grid>
-    </Grid>
+			<Grid container item >
+				<Grid container item md={6}>
+					<VisitorLogs scores={userScores} updateReq={renderReq}/>
+						{/*{userScores.map(score => (
+							"activity: " + score.activity + "\n score: " + score.score
+						))}*/}
+				</Grid>
+				<Grid container item md={1} sx={{display: "none"}}>
+				{renderReq}
+				</Grid>
+			</Grid>
 
-    <Snackbar
-      open={toastOpen}
-      autoHideDuration={2000}
-      onClose={() => setToastOpen(false)}
-      message={errorText}
-    />
-  </Grid>
-);
+			<Snackbar
+			  open={toastOpen}
+			  autoHideDuration={2000}
+			  onClose={handleClose}
+			  message={errorText}
+			/>
+		</Grid>
 
+	)
+}
 
-};
-
-export default ChildRoom;
-
-
-
-
+export default ChildRoom
